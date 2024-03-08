@@ -1,0 +1,123 @@
+﻿@{
+    ViewBag.Title = "Valuation Request Hard copy status";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td {
+        height: 28px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "updateHardcopyStatus", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+
+
+    <input type="hidden" name="EstimationRequestId" id="EstimationRequestId" value='@TempData["requestid"]' />
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    @Html.Raw(TempData["requestinfo"])
+    <table align="center" style="color:black" class="tblForm">
+        <tr>
+            <td><b>Status: &nbsp;</b></td>
+            <td>
+                @{
+                    <textarea id="HardCopyStatus" name="HardCopyStatus" value="@(TempData["HardCopyStatus"])"></textarea><br />
+                }
+            </td>
+            <td><div id="statusmsg" style="color:red"></div></td>
+        </tr>
+
+
+
+        <tr>
+            <td colspan="3">
+                <input type="button" value= "Update Status" class="linkEffect" onclick="HardCopyStatus2()" style="width:130px;margin-left:40px;margin-top:50px" />
+                <div id="status" style="color:blue"></div>
+            </td>
+
+        </tr>
+    </table><br />
+    <hr />
+
+
+
+
+
+
+}
+<script>
+
+
+    function validateForm() {
+        document.getElementById("statusmsg").innerHTML = "";
+        if (document.getElementById("HardCopyStatus").value == "") {
+            document.getElementById("statusmsg").innerHTML = "Please fill status.";
+        return false;
+        }
+
+
+
+
+
+        return true;
+
+    }
+
+    function HardCopyStatus2() {
+        document.getElementById("status").innerHTML = "";
+        // Checking whether FormData is available in browser
+        if (validateForm()) {
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+
+            fileData.append("HardCopyStatus", document.getElementById("HardCopyStatus").value);
+            fileData.append("requestid", document.getElementById("EstimationRequestId").value);
+
+
+
+            $.ajax({
+                url: '../Upload/HardCopyStatus',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result == "Error Occured while processing your request. Please try again.") {
+                        document.getElementById("status").innerHTML = result;
+
+                    }
+            else{
+
+                    document.getElementById("status").innerHTML = "Success";
+                    }
+                    location.reload();
+
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            //alert("FormData is not supported.");
+        }
+
+    }
+
+
+</script>
+
+
+
+

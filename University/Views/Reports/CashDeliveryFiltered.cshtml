@@ -1,0 +1,156 @@
+﻿
+@*@model IEnumerable<University.ViewModels.MultiPurposeVM>*@
+@{
+    ViewBag.Title = "Cash Delivery Report";
+    Layout = null;
+}
+
+
+
+<div style="overflow: auto; height: 80vh; width: 100%; padding: 5px">
+
+    <button id='btnExport' onclick='fnExcelReport()' class='linkEffect'> EXPORT </button>
+    <table border="1" id="datatable-buttons">
+        <tr style="background-color: lightblue; font-weight: bolder">
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Currency</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Denomination</b>
+            </th>
+            @******************Header for list of branchs*@
+            @{
+
+                foreach (var branch in (IEnumerable<University.Models.luOperationalLimit>)ViewBag.BranchNames)
+                {
+                    @Html.Raw("<th style='text-align: center'>" + branch.Branch_Name + "</th>");
+                }
+            }
+            @******************End header for list of branchs*@
+
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Total Debit</b>
+            </th>
+
+
+        </tr>
+
+
+
+
+        @{ int y = 0;
+
+         IEnumerable<University.Models.DenominationDelivered> deliverds = (IEnumerable<University.Models.DenominationDelivered>)ViewBag.DenominationDelivereds;
+         IEnumerable<University.Models.luNote> notes = (IEnumerable<University.Models.luNote>)ViewBag.Denominations;
+        }
+        @foreach (string currency in (List<string>)ViewBag.currencies)
+        {
+            List<University.Models.DenominationDelivered> delivered = (from r in deliverds where r.luNote.Currency == currency orderby r.luNote.Note select r).ToList();
+            List<decimal> currencynotes = (from n in notes where n.Currency == currency orderby n.Note select n.Note).ToList();
+            int j = 0;
+
+            foreach (decimal note in currencynotes)
+            {
+                y++;
+
+                if (y % 2 != 0)
+                {
+
+                    @Html.Raw("<tr class='odd' role='row'>");
+                }
+                else
+                {
+                    @Html.Raw("<tr class='even' role='row'>");
+                }
+                if (j == 0)
+                {
+                    @Html.Raw("<td rowspan='" + (currencynotes.Count() + 1) + "'>" + currency + "</td>");
+                }
+                if (j < currencynotes.Count())
+                {
+                    @Html.Raw("<td>" + note + "</td>");
+                }
+
+                decimal totalCreditForNote = 0;
+                foreach (var branch in (IEnumerable<University.Models.luOperationalLimit>)ViewBag.BranchNames)
+                {
+                    decimal totalNoteForBranch = (from d in deliverds where d.CashRequest.Branch == branch.Branch_code where d.luNote.Note == note where d.CashRequest.Currency == currency select d.Amount * d.luNote.Note).Sum();
+                    totalCreditForNote += totalNoteForBranch;
+                    @Html.Raw("<td>" + totalNoteForBranch.ToString("N2") + "</td>");
+
+                }
+                @Html.Raw("<td>" + totalCreditForNote.ToString("N2") + "</td>");
+
+                                                                               j++;
+            }
+            if (y % 2 != 0)
+            {
+
+                @Html.Raw("<tr class='odd' role='row'><td>Total</td>");
+            }
+            else
+            {
+                @Html.Raw("<tr class='even' role='row'><td>Total</td>");
+            }
+            decimal totalcreditforall = 0;
+            foreach (var branch in (IEnumerable<University.Models.luOperationalLimit>)ViewBag.BranchNames)
+            {
+                decimal totalcreditforbranch = (from d in deliverds where d.CashRequest.Branch == branch.Branch_code where d.CashRequest.Currency == currency select d.Amount * d.luNote.Note).Sum(); ;
+                totalcreditforall += totalcreditforbranch;
+                @Html.Raw("<td>" + totalcreditforbranch.ToString("N2") + "</td>");
+
+            }
+            @Html.Raw("<td>" + totalcreditforall.ToString("N2") + "</td></tr>");
+
+        }
+
+
+
+    </table>
+
+</div>
+
+<script type="text/javascript">
+
+    //$("#UserId").selectpicker('render');
+    // $("#asofdate").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    //  $("#From").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    // $("#To").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+
+
+
+
+
+    function fnExcelReport() {
+        var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+        var textRange; var j = 0;
+        tab = document.getElementById('datatable-buttons'); // id of table
+
+        for (j = 0 ; j < tab.rows.length ; j++) {
+            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+            //tab_text=tab_text+"</tr>";
+        }
+
+        tab_text = tab_text + "</table>";
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html", "replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus();
+            sa = txtArea1.document.execCommand("SaveAs", true, "Cash Collection.xlsx");
+        }
+        else                 //other browser not tested on IE 11
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+        return (sa);
+    }
+
+</script>

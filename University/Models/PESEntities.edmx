@@ -1,0 +1,859 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="pesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EstimationRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApplicantName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="MortgagerName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="EstimationAddress1" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="HardCopyFiles" Type="nvarchar" MaxLength="500" />
+          <Property Name="ManagerResponse" Type="nvarchar" MaxLength="500" />
+          <Property Name="CustomerType" Type="int" Nullable="false" />
+          <Property Name="PropertyType" Type="int" Nullable="false" />
+          <Property Name="ValuationPurpose" Type="int" Nullable="false" />
+          <Property Name="HardCopyStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="CSRRemark" Type="nvarchar" MaxLength="500" />
+          <Property Name="EstimationReport" Type="nvarchar" MaxLength="500" />
+          <Property Name="UploadedBy" Type="int" Nullable="false" />
+          <Property Name="DateUploaded" Type="date" Nullable="false" />
+          <Property Name="AssignedBy" Type="int" />
+          <Property Name="AssignedTo" Type="int" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="RequestingBranch" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="EstimationAddress2" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="ValuerRemark" Type="nvarchar" MaxLength="500" />
+          <Property Name="DateAssigned" Type="datetime" />
+          <Property Name="ValuationDate" Type="datetime" />
+          <Property Name="ValuationTime" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="luAccountStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luCustomerType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luDocumentStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luDocumentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luGrant">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserGroupId" Type="int" Nullable="false" />
+          <Property Name="ActivityId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luPropertyType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luUserActivities">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ACtivityName" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luUserGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Group" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="luValuationPurpose">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Purpose" Type="nvarchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UploadedDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EstimationRequestId" Type="int" Nullable="false" />
+          <Property Name="DocumentTypeId" Type="int" Nullable="false" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="UserGroup" Type="int" Nullable="false" />
+          <Property Name="Division" Type="varchar" MaxLength="20" />
+          <Property Name="AccountStatus" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__luGrant__Activit__44FF419A">
+          <End Role="luUserActivities" Type="Self.luUserActivities" Multiplicity="1" />
+          <End Role="luGrant" Type="Self.luGrant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luUserActivities">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="luGrant">
+              <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__luGrant__UserGro__45F365D3">
+          <End Role="luUserGroup" Type="Self.luUserGroup" Multiplicity="1" />
+          <End Role="luGrant" Type="Self.luGrant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luUserGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="luGrant">
+              <PropertyRef Name="UserGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Assig__5DCAEF64">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="AssignedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Assig__5EBF139D">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Custo__5AEE82B9">
+          <End Role="luCustomerType" Type="Self.luCustomerType" Multiplicity="1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luCustomerType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="CustomerType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Docum__656C112C">
+          <End Role="luDocumentType" Type="Self.luDocumentType" Multiplicity="1" />
+          <End Role="UploadedDocument" Type="Self.UploadedDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luDocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UploadedDocument">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Estim__6477ECF3">
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="1" />
+          <End Role="UploadedDocument" Type="Self.UploadedDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstimationRequest">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UploadedDocument">
+              <PropertyRef Name="EstimationRequestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Prope__5BE2A6F2">
+          <End Role="luPropertyType" Type="Self.luPropertyType" Multiplicity="1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luPropertyType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="PropertyType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Statu__5FB337D6">
+          <End Role="luDocumentStatus" Type="Self.luDocumentStatus" Multiplicity="1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luDocumentStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Uploa__60A75C0F">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="UploadedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Valua__5CD6CB2B">
+          <End Role="luValuationPurpose" Type="Self.luValuationPurpose" Multiplicity="1" />
+          <End Role="EstimationRequest" Type="Self.EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luValuationPurpose">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="ValuationPurpose" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__AccountSta__3E52440B">
+          <End Role="luAccountStatus" Type="Self.luAccountStatus" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luAccountStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="AccountStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__UserGroup__3F466844">
+          <End Role="luUserGroup" Type="Self.luUserGroup" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luUserGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="pesModelStoreContainer">
+          <EntitySet Name="EstimationRequest" EntityType="Self.EstimationRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luAccountStatus" EntityType="Self.luAccountStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luCustomerType" EntityType="Self.luCustomerType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luDocumentStatus" EntityType="Self.luDocumentStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luDocumentType" EntityType="Self.luDocumentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luGrant" EntityType="Self.luGrant" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luPropertyType" EntityType="Self.luPropertyType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luUserActivities" EntityType="Self.luUserActivities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luUserGroup" EntityType="Self.luUserGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="luValuationPurpose" EntityType="Self.luValuationPurpose" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UploadedDocument" EntityType="Self.UploadedDocument" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__luGrant__Activit__44FF419A" Association="Self.FK__luGrant__Activit__44FF419A">
+            <End Role="luUserActivities" EntitySet="luUserActivities" />
+            <End Role="luGrant" EntitySet="luGrant" />
+          </AssociationSet>
+          <AssociationSet Name="FK__luGrant__UserGro__45F365D3" Association="Self.FK__luGrant__UserGro__45F365D3">
+            <End Role="luUserGroup" EntitySet="luUserGroup" />
+            <End Role="luGrant" EntitySet="luGrant" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Assig__5DCAEF64" Association="Self.FK__UploadedD__Assig__5DCAEF64">
+            <End Role="User" EntitySet="User" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Assig__5EBF139D" Association="Self.FK__UploadedD__Assig__5EBF139D">
+            <End Role="User" EntitySet="User" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Custo__5AEE82B9" Association="Self.FK__UploadedD__Custo__5AEE82B9">
+            <End Role="luCustomerType" EntitySet="luCustomerType" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Docum__656C112C" Association="Self.FK__UploadedD__Docum__656C112C">
+            <End Role="luDocumentType" EntitySet="luDocumentType" />
+            <End Role="UploadedDocument" EntitySet="UploadedDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Estim__6477ECF3" Association="Self.FK__UploadedD__Estim__6477ECF3">
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+            <End Role="UploadedDocument" EntitySet="UploadedDocument" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Prope__5BE2A6F2" Association="Self.FK__UploadedD__Prope__5BE2A6F2">
+            <End Role="luPropertyType" EntitySet="luPropertyType" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Statu__5FB337D6" Association="Self.FK__UploadedD__Statu__5FB337D6">
+            <End Role="luDocumentStatus" EntitySet="luDocumentStatus" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Uploa__60A75C0F" Association="Self.FK__UploadedD__Uploa__60A75C0F">
+            <End Role="User" EntitySet="User" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Valua__5CD6CB2B" Association="Self.FK__UploadedD__Valua__5CD6CB2B">
+            <End Role="luValuationPurpose" EntitySet="luValuationPurpose" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequest" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__AccountSta__3E52440B" Association="Self.FK__User__AccountSta__3E52440B">
+            <End Role="luAccountStatus" EntitySet="luAccountStatus" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__UserGroup__3F466844" Association="Self.FK__User__UserGroup__3F466844">
+            <End Role="luUserGroup" EntitySet="luUserGroup" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="pesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="luAccountStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__User__AccountSta__3E52440B" FromRole="luAccountStatus" ToRole="User" />
+        </EntityType>
+        <EntityType Name="luGrant">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserGroupId" Type="Int32" Nullable="false" />
+          <Property Name="ActivityId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="luUserActivity" Relationship="Self.FK__luGrant__Activit__44FF419A" FromRole="luGrant" ToRole="luUserActivities" />
+          <NavigationProperty Name="luUserGroup" Relationship="Self.FK__luGrant__UserGro__45F365D3" FromRole="luGrant" ToRole="luUserGroup" />
+        </EntityType>
+        <EntityType Name="luUserActivity">
+          <Key>
+            <PropertyRef Name="ActivityId" />
+          </Key>
+          <Property Name="ActivityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ACtivityName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="luGrants" Relationship="Self.FK__luGrant__Activit__44FF419A" FromRole="luUserActivities" ToRole="luGrant" />
+        </EntityType>
+        <EntityType Name="luUserGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Group" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="luGrants" Relationship="Self.FK__luGrant__UserGro__45F365D3" FromRole="luUserGroup" ToRole="luGrant" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__User__UserGroup__3F466844" FromRole="luUserGroup" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserGroup" Type="Int32" Nullable="false" />
+          <Property Name="Division" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AccountStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="luAccountStatu" Relationship="Self.FK__User__AccountSta__3E52440B" FromRole="User" ToRole="luAccountStatus" />
+          <NavigationProperty Name="luUserGroup" Relationship="Self.FK__User__UserGroup__3F466844" FromRole="User" ToRole="luUserGroup" />
+          <NavigationProperty Name="EstimationRequests" Relationship="pesModel.FK__UploadedD__Assig__5DCAEF64" FromRole="User" ToRole="EstimationRequest" />
+          <NavigationProperty Name="EstimationRequests1" Relationship="pesModel.FK__UploadedD__Assig__5EBF139D" FromRole="User" ToRole="EstimationRequest" />
+          <NavigationProperty Name="EstimationRequests2" Relationship="pesModel.FK__UploadedD__Uploa__60A75C0F" FromRole="User" ToRole="EstimationRequest" />
+        </EntityType>
+        <Association Name="FK__User__AccountSta__3E52440B">
+          <End Role="luAccountStatus" Type="Self.luAccountStatu" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luAccountStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="AccountStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__luGrant__Activit__44FF419A">
+          <End Role="luUserActivities" Type="Self.luUserActivity" Multiplicity="1" />
+          <End Role="luGrant" Type="Self.luGrant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luUserActivities">
+              <PropertyRef Name="ActivityId" />
+            </Principal>
+            <Dependent Role="luGrant">
+              <PropertyRef Name="ActivityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__luGrant__UserGro__45F365D3">
+          <End Role="luUserGroup" Type="Self.luUserGroup" Multiplicity="1" />
+          <End Role="luGrant" Type="Self.luGrant" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luUserGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="luGrant">
+              <PropertyRef Name="UserGroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__UserGroup__3F466844">
+          <End Role="luUserGroup" Type="Self.luUserGroup" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luUserGroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="UserGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="pesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="luAccountStatus" EntityType="Self.luAccountStatu" />
+          <EntitySet Name="luGrants" EntityType="Self.luGrant" />
+          <EntitySet Name="luUserActivities" EntityType="Self.luUserActivity" />
+          <EntitySet Name="luUserGroups" EntityType="Self.luUserGroup" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK__User__AccountSta__3E52440B" Association="Self.FK__User__AccountSta__3E52440B">
+            <End Role="luAccountStatus" EntitySet="luAccountStatus" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__luGrant__Activit__44FF419A" Association="Self.FK__luGrant__Activit__44FF419A">
+            <End Role="luUserActivities" EntitySet="luUserActivities" />
+            <End Role="luGrant" EntitySet="luGrants" />
+          </AssociationSet>
+          <AssociationSet Name="FK__luGrant__UserGro__45F365D3" Association="Self.FK__luGrant__UserGro__45F365D3">
+            <End Role="luUserGroup" EntitySet="luUserGroups" />
+            <End Role="luGrant" EntitySet="luGrants" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__UserGroup__3F466844" Association="Self.FK__User__UserGroup__3F466844">
+            <End Role="luUserGroup" EntitySet="luUserGroups" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="luDocumentStatus" EntityType="pesModel.luDocumentStatu" />
+          <EntitySet Name="luCustomerTypes" EntityType="pesModel.luCustomerType" />
+          <EntitySet Name="luDocumentTypes" EntityType="pesModel.luDocumentType" />
+          <EntitySet Name="luPropertyTypes" EntityType="pesModel.luPropertyType" />
+          <EntitySet Name="luValuationPurposes" EntityType="pesModel.luValuationPurpose" />
+          <EntitySet Name="UploadedDocuments" EntityType="pesModel.UploadedDocument" />
+          <AssociationSet Name="FK__UploadedD__Docum__656C112C" Association="pesModel.FK__UploadedD__Docum__656C112C">
+            <End Role="luDocumentType" EntitySet="luDocumentTypes" />
+            <End Role="UploadedDocument" EntitySet="UploadedDocuments" />
+          </AssociationSet>
+          <EntitySet Name="EstimationRequests" EntityType="pesModel.EstimationRequest" />
+          <AssociationSet Name="FK__UploadedD__Assig__5DCAEF64" Association="pesModel.FK__UploadedD__Assig__5DCAEF64">
+            <End Role="User" EntitySet="Users" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Assig__5EBF139D" Association="pesModel.FK__UploadedD__Assig__5EBF139D">
+            <End Role="User" EntitySet="Users" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Custo__5AEE82B9" Association="pesModel.FK__UploadedD__Custo__5AEE82B9">
+            <End Role="luCustomerType" EntitySet="luCustomerTypes" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Estim__6477ECF3" Association="pesModel.FK__UploadedD__Estim__6477ECF3">
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+            <End Role="UploadedDocument" EntitySet="UploadedDocuments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Prope__5BE2A6F2" Association="pesModel.FK__UploadedD__Prope__5BE2A6F2">
+            <End Role="luPropertyType" EntitySet="luPropertyTypes" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Statu__5FB337D6" Association="pesModel.FK__UploadedD__Statu__5FB337D6">
+            <End Role="luDocumentStatu" EntitySet="luDocumentStatus" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Uploa__60A75C0F" Association="pesModel.FK__UploadedD__Uploa__60A75C0F">
+            <End Role="User" EntitySet="Users" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UploadedD__Valua__5CD6CB2B" Association="pesModel.FK__UploadedD__Valua__5CD6CB2B">
+            <End Role="luValuationPurpose" EntitySet="luValuationPurposes" />
+            <End Role="EstimationRequest" EntitySet="EstimationRequests" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="luDocumentStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EstimationRequests" Relationship="pesModel.FK__UploadedD__Statu__5FB337D6" FromRole="luDocumentStatu" ToRole="EstimationRequest" />
+        </EntityType>
+        <EntityType Name="luCustomerType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EstimationRequests" Relationship="pesModel.FK__UploadedD__Custo__5AEE82B9" FromRole="luCustomerType" ToRole="EstimationRequest" />
+        </EntityType>
+        <EntityType Name="luDocumentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UploadedDocuments" Relationship="pesModel.FK__UploadedD__Docum__656C112C" FromRole="luDocumentType" ToRole="UploadedDocument" />
+        </EntityType>
+        <EntityType Name="luPropertyType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EstimationRequests" Relationship="pesModel.FK__UploadedD__Prope__5BE2A6F2" FromRole="luPropertyType" ToRole="EstimationRequest" />
+        </EntityType>
+        <EntityType Name="luValuationPurpose">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Purpose" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EstimationRequests" Relationship="pesModel.FK__UploadedD__Valua__5CD6CB2B" FromRole="luValuationPurpose" ToRole="EstimationRequest" />
+        </EntityType>
+        <EntityType Name="UploadedDocument">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EstimationRequestId" Type="Int32" Nullable="false" />
+          <Property Name="DocumentTypeId" Type="Int32" Nullable="false" />
+          <Property Name="FilePath" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="luDocumentType" Relationship="pesModel.FK__UploadedD__Docum__656C112C" FromRole="UploadedDocument" ToRole="luDocumentType" />
+          <Property Name="Remark" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EstimationRequest" Relationship="pesModel.FK__UploadedD__Estim__6477ECF3" FromRole="UploadedDocument" ToRole="EstimationRequest" />
+        </EntityType>
+        <Association Name="FK__UploadedD__Docum__656C112C">
+          <End Type="pesModel.luDocumentType" Role="luDocumentType" Multiplicity="1" />
+          <End Type="pesModel.UploadedDocument" Role="UploadedDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luDocumentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UploadedDocument">
+              <PropertyRef Name="DocumentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EstimationRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplicantName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="MortgagerName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EstimationAddress1" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="HardCopyFiles" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ManagerResponse" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerType" Type="Int32" Nullable="false" />
+          <Property Name="PropertyType" Type="Int32" Nullable="false" />
+          <Property Name="ValuationPurpose" Type="Int32" Nullable="false" />
+          <Property Name="HardCopyStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CSRRemark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EstimationReport" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="UploadedBy" Type="Int32" Nullable="false" />
+          <Property Name="DateUploaded" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="AssignedBy" Type="Int32" />
+          <Property Name="AssignedTo" Type="Int32" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="RequestingBranch" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EstimationAddress2" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="pesModel.FK__UploadedD__Assig__5DCAEF64" FromRole="EstimationRequest" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="pesModel.FK__UploadedD__Assig__5EBF139D" FromRole="EstimationRequest" ToRole="User" />
+          <NavigationProperty Name="luCustomerType" Relationship="pesModel.FK__UploadedD__Custo__5AEE82B9" FromRole="EstimationRequest" ToRole="luCustomerType" />
+          <NavigationProperty Name="UploadedDocuments" Relationship="pesModel.FK__UploadedD__Estim__6477ECF3" FromRole="EstimationRequest" ToRole="UploadedDocument" />
+          <NavigationProperty Name="luPropertyType" Relationship="pesModel.FK__UploadedD__Prope__5BE2A6F2" FromRole="EstimationRequest" ToRole="luPropertyType" />
+          <NavigationProperty Name="luDocumentStatu" Relationship="pesModel.FK__UploadedD__Statu__5FB337D6" FromRole="EstimationRequest" ToRole="luDocumentStatu" />
+          <NavigationProperty Name="User2" Relationship="pesModel.FK__UploadedD__Uploa__60A75C0F" FromRole="EstimationRequest" ToRole="User" />
+          <NavigationProperty Name="luValuationPurpose" Relationship="pesModel.FK__UploadedD__Valua__5CD6CB2B" FromRole="EstimationRequest" ToRole="luValuationPurpose" />
+          <Property Name="ValuerRemark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="DateAssigned" Type="DateTime" Precision="3" />
+          <Property Name="ValuationDate" Type="DateTime" Precision="3" />
+          <Property Name="ValuationTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK__UploadedD__Assig__5DCAEF64">
+          <End Type="pesModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="AssignedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Assig__5EBF139D">
+          <End Type="pesModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="AssignedTo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Custo__5AEE82B9">
+          <End Type="pesModel.luCustomerType" Role="luCustomerType" Multiplicity="1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luCustomerType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="CustomerType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Estim__6477ECF3">
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="1" />
+          <End Type="pesModel.UploadedDocument" Role="UploadedDocument" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EstimationRequest">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UploadedDocument">
+              <PropertyRef Name="EstimationRequestId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Prope__5BE2A6F2">
+          <End Type="pesModel.luPropertyType" Role="luPropertyType" Multiplicity="1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luPropertyType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="PropertyType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Statu__5FB337D6">
+          <End Type="pesModel.luDocumentStatu" Role="luDocumentStatu" Multiplicity="1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luDocumentStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Uploa__60A75C0F">
+          <End Type="pesModel.User" Role="User" Multiplicity="1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="UploadedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UploadedD__Valua__5CD6CB2B">
+          <End Type="pesModel.luValuationPurpose" Role="luValuationPurpose" Multiplicity="1" />
+          <End Type="pesModel.EstimationRequest" Role="EstimationRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="luValuationPurpose">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EstimationRequest">
+              <PropertyRef Name="ValuationPurpose" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="pesModelStoreContainer" CdmEntityContainer="pesEntities">
+          <EntitySetMapping Name="luAccountStatus">
+            <EntityTypeMapping TypeName="pesModel.luAccountStatu">
+              <MappingFragment StoreEntitySet="luAccountStatus">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luGrants">
+            <EntityTypeMapping TypeName="pesModel.luGrant">
+              <MappingFragment StoreEntitySet="luGrant">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserGroupId" ColumnName="UserGroupId" />
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luUserActivities">
+            <EntityTypeMapping TypeName="pesModel.luUserActivity">
+              <MappingFragment StoreEntitySet="luUserActivities">
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+                <ScalarProperty Name="ACtivityName" ColumnName="ACtivityName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luUserGroups">
+            <EntityTypeMapping TypeName="pesModel.luUserGroup">
+              <MappingFragment StoreEntitySet="luUserGroup">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Group" ColumnName="Group" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="pesModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserGroup" ColumnName="UserGroup" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luDocumentStatus">
+            <EntityTypeMapping TypeName="pesModel.luDocumentStatu">
+              <MappingFragment StoreEntitySet="luDocumentStatus">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luCustomerTypes">
+            <EntityTypeMapping TypeName="pesModel.luCustomerType">
+              <MappingFragment StoreEntitySet="luCustomerType">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luDocumentTypes">
+            <EntityTypeMapping TypeName="pesModel.luDocumentType">
+              <MappingFragment StoreEntitySet="luDocumentType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luPropertyTypes">
+            <EntityTypeMapping TypeName="pesModel.luPropertyType">
+              <MappingFragment StoreEntitySet="luPropertyType">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="luValuationPurposes">
+            <EntityTypeMapping TypeName="pesModel.luValuationPurpose">
+              <MappingFragment StoreEntitySet="luValuationPurpose">
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UploadedDocuments">
+            <EntityTypeMapping TypeName="pesModel.UploadedDocument">
+              <MappingFragment StoreEntitySet="UploadedDocument">
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="DocumentTypeId" ColumnName="DocumentTypeId" />
+                <ScalarProperty Name="EstimationRequestId" ColumnName="EstimationRequestId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EstimationRequests">
+            <EntityTypeMapping TypeName="pesModel.EstimationRequest">
+              <MappingFragment StoreEntitySet="EstimationRequest">
+                <ScalarProperty Name="ValuationTime" ColumnName="ValuationTime" />
+                <ScalarProperty Name="ValuationDate" ColumnName="ValuationDate" />
+                <ScalarProperty Name="DateAssigned" ColumnName="DateAssigned" />
+                <ScalarProperty Name="ValuerRemark" ColumnName="ValuerRemark" />
+                <ScalarProperty Name="EstimationAddress2" ColumnName="EstimationAddress2" />
+                <ScalarProperty Name="RequestingBranch" ColumnName="RequestingBranch" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="AssignedBy" ColumnName="AssignedBy" />
+                <ScalarProperty Name="DateUploaded" ColumnName="DateUploaded" />
+                <ScalarProperty Name="UploadedBy" ColumnName="UploadedBy" />
+                <ScalarProperty Name="EstimationReport" ColumnName="EstimationReport" />
+                <ScalarProperty Name="CSRRemark" ColumnName="CSRRemark" />
+                <ScalarProperty Name="HardCopyStatus" ColumnName="HardCopyStatus" />
+                <ScalarProperty Name="ValuationPurpose" ColumnName="ValuationPurpose" />
+                <ScalarProperty Name="PropertyType" ColumnName="PropertyType" />
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="ManagerResponse" ColumnName="ManagerResponse" />
+                <ScalarProperty Name="HardCopyFiles" ColumnName="HardCopyFiles" />
+                <ScalarProperty Name="EstimationAddress1" ColumnName="EstimationAddress1" />
+                <ScalarProperty Name="MortgagerName" ColumnName="MortgagerName" />
+                <ScalarProperty Name="ApplicantName" ColumnName="ApplicantName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

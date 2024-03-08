@@ -1,0 +1,69 @@
+﻿
+@model System.DateTime?
+
+
+<div class="editor-field">
+    @Html.TextBox("", String.Format("{0:dd/MM/yyyy}", (Model == DateTime.MinValue) ? null : Model), new { @class = "text" })
+</div>
+@Scripts.Render("~/bundles/bootstrap")
+<script type="text/javascript">
+   
+    $(document).ready(function () {
+    
+        $("#@ViewData.ModelMetadata.PropertyName").datepicker({           
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: 'dd/mm/yy',
+            gotoCurrent: true,
+            autoclose: true,
+            forceParse: false,
+            
+        });
+        
+        
+    });
+
+    $("#@ViewData.ModelMetadata.PropertyName").datepicker({
+        beforeShow: function (input) {
+            $(input).css({
+                "position": "relative",
+                "z-index": 999999
+            });
+        }
+    });
+    $("#@ViewData.ModelMetadata.PropertyName").on('changeDate', function (ev) {
+        $(this).datepicker('hide');
+        //alert("hello again");
+       
+         ev.stopPropagation();
+         ev.stopImmediatePropagation();
+        
+      
+    });
+ 
+    $("#@ViewData.ModelMetadata.PropertyName").on('click', function (ev) {
+       
+        // alert("hello");
+    
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+
+
+    });
+    $("#@ViewData.ModelMetadata.PropertyName").on('hide', function (ev) {
+
+        // alert("hello");
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+
+
+    });
+    $("#@ViewData.ModelMetadata.PropertyName").on('show', function (ev) {
+
+        // alert("hello");
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+
+
+    });
+</script>

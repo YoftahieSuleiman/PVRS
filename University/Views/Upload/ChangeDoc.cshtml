@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "Valuation Request";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td {
+        height: 28px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "changeDocument", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    <table align="center" style="color:black" class="tblForm">
+         <tr>
+            <td><b>File &nbsp;</b></td>
+            <td>
+                <input type="file" name="File" id="File" /><br />
+            </td>
+            <td><div style="color:red" id="filemsg"></div></td>
+        </tr>
+       
+
+        <tr>
+            <td colspan="3">
+                <input type="button" value="   Change   " class="linkEffect" onclick="changeDocument()" />
+                <div id="status" style="color:blue"></div>
+            </td>
+
+        </tr>
+    </table><br />
+    
+    
+
+
+
+
+}
+<script>
+
+
+
+   
+    function validateForm() {
+        document.getElementById("filemsg").innerHTML = "";
+        var filePath = $("#File").val();
+        var file_ext = filePath.substr(filePath.lastIndexOf('.') + 1, filePath.length);
+        if (file_ext != "pdf" && file_ext != "PDF") {
+            document.getElementById("filemsg").innerHTML = "Only pdf files are allowed.";
+        return false;
+        }
+
+        
+
+
+
+        return true;
+
+    }
+
+    function changeDocument() {
+        document.getElementById("status").innerHTML = "";
+        // Checking whether FormData is available in browser
+        if (validateForm()) {
+            var fileUpload = $("#File").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < 1; i++) {
+                fileData.append("File", files[i]);
+            }
+
+            // Adding one more key to FormData object
+            fileData.append('path', '@(TempData["path"])');
+
+            $.ajax({
+                url: '../ChangeDoc',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result == "Error Occured while processing your request. Please try again.") {
+                        document.getElementById("status").innerHTML = result;
+
+                    }
+            else{
+
+                    document.getElementById("status").innerHTML = "Successfully changed document.";
+            }
+
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            //alert("FormData is not supported.");
+        }
+
+    }
+
+
+</script>
+
+

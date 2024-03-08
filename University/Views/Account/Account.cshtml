@@ -1,0 +1,140 @@
+﻿@model IEnumerable<University.Models.User>
+
+<p>
+    <a href="#" onclick="UserCreate()" class="linkEffect" style="width:200px">New Account</a>
+</p>
+<div style="height:1100px;overflow:auto">
+    
+        <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer" style="overflow: auto; width: 100%; padding: 5p; color: #000; height: 650px; ">
+            <div id="datatable-buttons_filter" class="dataTables_filter"></div>
+
+            <table id="datatable-buttons" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="datatable-buttons_info" style="width: 100%;color:#000;background-color:white">
+                <thead>
+                    <tr role="row">
+                        <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                           User Name
+                        </th>
+                        <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                            User Group
+                        </th>
+                        <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                            Account Status
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                <tbody>
+                    @{ int x = 0;}
+                    @foreach (var item in Model)
+                    {
+                        string stat = "";
+                        if (item.Status == 0)
+                        {
+                            stat="Disabled";
+                        }
+                        else
+                        {
+                            stat = "Active";
+                        }
+                        x++;
+
+                        if (x % 2 != 0)
+                        {
+
+                            @Html.Raw("<tr class='odd' role='row'>");
+                        }
+                        else
+                        {
+                            @Html.Raw("<tr class='even' role='row'>");
+                        }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.luUserGroup.UserGroupName)
+                            </td>
+                            <td>
+                                @Html.Raw(stat)
+
+                            </td>
+                            <td>
+                                <a href="#" onclick="UserEdit(@item.UserId)" class="linkEffect">Edit</a>
+                            </td>
+                        @Html.Raw("</tr>");
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="photoEditor">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" id="myBodyBG2">
+                        <a href="#" class="close" data-dismiss="modal" style="color:#fff"><h1>-</h1></a>
+                        <h3 class="modal-title" id="modaltitle" style="text-align:center;color:#cd5c5c"></h3>
+                    </div>
+                    <div class="modal-body" id="modalbodydiv" style="height:225px;overflow:auto">
+
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <script>
+
+    $(document).ready(function () {
+
+        var Continue = '@TempData["continue"]';
+        var wizard2 = '@TempData["Wizard2"]';
+
+        if (Continue == "Create Account") {
+            UserCreate();
+        }
+        else if (Continue == "Edit Account") {
+           
+            UserEdit('@TempData["UserId"]', wizard2);
+
+        }
+
+    });
+
+
+            var UserEdit = function (userid, wizard2) {
+      
+
+
+
+                $("#modaltitle").text("Change user");
+                var url = "";
+                url = "../Account/UserEdit?UserId=" + userid;
+                if (wizard2 == "Yes") {
+                    url = "../Account/UserEdit2?UserId=" + userid;
+                }
+
+       
+       
+        
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+
+
+        })
+
+
+    }
+
+    var UserCreate = function () {
+
+        $("#modaltitle").text("Create user");
+        var url = "../Account/UserCreate";
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+
+
+        })
+
+
+    }
+        </script>

@@ -1,0 +1,164 @@
+﻿@model University.Models.EstimationRequest
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+    University.Models.pesEntities db = new University.Models.pesEntities();
+}
+
+
+
+<div>
+    <h2>Valuation request detail of @Model.ApplicantName requested by @Model.User2.UserName</h2>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Branch</dt>
+        <dd>
+            @Model.RequestingBranch
+        </dd>
+        <dt>Applicant Name</dt>
+        <dd>
+            @Model.ApplicantName
+        </dd>
+        <dt>Mortgager Name</dt>
+        <dd>
+            @Model.MortgagerName
+        </dd>
+        <dt>Estimation Address1</dt>
+        <dd>
+            @Model.EstimationAddress1
+        </dd>
+        <dt>Estimation Address2</dt>
+        <dd>
+            @Model.EstimationAddress2
+        </dd>
+        <dt>Customer Type</dt>
+        <dd>
+            @Model.luCustomerType.Type
+        </dd>
+        <dt>Property Type</dt>
+        <dd>
+            @Model.luPropertyType.Type
+        </dd>
+        <dt>Valuation Purpose</dt>
+        <dd>
+            @Model.luValuationPurpose.Purpose
+        </dd>
+        <dt>Hard Copy Files</dt>
+        <dd>
+            @Model.HardCopyFiles
+        </dd>
+        <dt>Date Requested</dt>
+        <dd>
+            @Model.DateUploaded.ToString("MMM dd,yyyy")
+        </dd>
+        <dt>Requested By</dt>
+        <dd>
+            @Model.User2.UserName
+        </dd>
+        <dt>Hard Copy Status</dt>
+        <dd>
+            @Model.HardCopyStatus
+        </dd>
+        <dt>Branch</dt>
+        <dd>
+            @Model.RequestingBranch
+        </dd>
+        <dt>Assigned To</dt>
+        <dd>
+            @(Model.AssignedTo!=null?Model.User1.UserName:"Not Assigned")
+        </dd>
+        <dt>Valuation Date</dt>
+        <dd>
+            @(Model.ValuationDate != null ? Model.ValuationDate.Value.ToString("MMM dd,yyy")+", "+Model.ValuationTime : "Not Assigned")
+        </dd>
+        <dt>Valuer Remark</dt>
+        <dd>
+            @(Model.ValuerRemark !=null?Model.ValuerRemark:"")
+        </dd>
+        <dt>Assigned By</dt>
+        <dd>
+            @(Model.AssignedBy != null ? Model.User.UserName : "Not Assigned")
+        </dd>
+        <dt>Manager Response</dt>
+        <dd>
+            @Model.ManagerResponse
+        </dd>
+        <dt>Final Remark</dt>
+        <dd>
+            @Model.CSRRemark
+        </dd>
+
+  <dt>
+            Status
+        </dt>
+
+        <dd>
+            @Model.luDocumentStatu.Status
+        </dd>
+
+
+
+
+    </dl>
+</div>
+@{
+    if (Session["UserID"] != null && Session["UserGroup"] != null && (Model.AssignedTo == int.Parse(Session["UserID"].ToString()) || Session["UserGroup"].ToString()=="1"))
+    {
+        <div>
+            <h2>Uploaded Documents</h2>
+            <table id="datatable-buttons" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="datatable-buttons_info" style="width: 100%;color:#000;background-color:white">
+                <thead>
+                    <tr role="row">
+                        <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                            Type
+                        </th>
+                        <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int x = 0;
+                     List<University.Models.UploadedDocument> docs = (List<University.Models.UploadedDocument>)ViewBag.docs;
+
+
+                     foreach (var item in docs)
+                     {
+
+                         x++;
+
+                         if (x % 2 != 0)
+                         {
+
+                            @Html.Raw("<tr class='odd' role='row'>");
+                         }
+                         else
+                         {
+                            @Html.Raw("<tr class='even' role='row'>")
+                         }
+                    <td>
+                        @(item.luDocumentType.Name + (item.DocumentTypeId == 6 ? ("--" + item.Remark) : ""))
+                    </td>
+                        <td>
+                            <a href='@(item.FilePath)' target="_blank">View</a>
+                        </td>
+
+                        @Html.Raw("</tr>");
+                     }
+                    }
+                    </tbody>
+                </table>
+
+            </div>
+    }
+}
+
+
+
+<p>
+    <a href="~/Home/Home" class="linkEffect">Back to List</a>
+
+</p>
+

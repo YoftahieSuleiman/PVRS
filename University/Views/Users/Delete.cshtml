@@ -1,0 +1,117 @@
+﻿@model University.Models.User
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h3>Are you sure you want to delete this?</h3>
+    <div>
+        <h4>User</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.UserName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Password)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Password)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.FullName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.FullName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DateOfBirth)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Gender)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Gender)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Weight)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Weight)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.MedicalHistory)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.MedicalHistory)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.DateJoined)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.DateJoined)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Photo)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Photo)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.luUserGroup.Group)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.luUserGroup.Group)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.luAccountStatu.Status)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.luAccountStatu.Status)
+            </dd>
+    
+        </dl>
+    
+        @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+    
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-default" /> |
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        }
+    </div>
+</body>
+</html>

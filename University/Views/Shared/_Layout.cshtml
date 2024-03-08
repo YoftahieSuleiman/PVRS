@@ -1,0 +1,508 @@
+﻿@{
+    if (Session["UserName"] == null)
+    {
+        Response.Redirect(Url.Action("Login", "Home", null));
+    }   
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+    <script src="~/Scripts/jquery-2.2.3.min.js"></script>   
+   
+    <script src="~/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap-select.js"></script>
+    <!-- Bootstrap -->
+
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Content/bootstrap-select.css" rel="stylesheet" />
+    <!-- CSS text editor -->
+    <link href="~/JQTE/jquery-te-1.4.0.css" rel="stylesheet" />
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+
+    <title>PVRS</title>
+   
+ <!-- Font Awesome -->
+    <link href="~/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="~/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <link href="~/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
+
+    <!-- bootstrap-progressbar -->
+    <link href="~/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <link href="~/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    <!-- bootstrap-daterangepicker -->
+    <link href="~/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+   
+  
+    <!-- Datatables -->
+    <link href="~/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+    <link href="~/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+  
+
+
+
+    <!-- Custom Theme Style -->
+    <link href="~/build/css/custom.min.css" rel="stylesheet">
+    <link href="~/images/animate.css" rel="stylesheet" />
+
+   
+    <!-- Datatables -->
+    <script src="~/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="~/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="~/vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <script src="~/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script src="~/vendors/jszip/dist/jszip.min.js"></script>
+    <script src="~/vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="~/vendors/pdfmake/build/vfs_fonts.js"></script>
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
+    @*<script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>*@
+
+    @*<script src="@Url.Content("~/Scripts/jquery-1.6.1.min.js")" type="text/javascript"></script>*@
+    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+
+    <link href="~/images/mystyles.css" rel="stylesheet" />
+    <style type="text/css">
+
+       
+
+       
+    </style>
+
+    @RenderSection("Scripts", false)
+</head>
+@{
+    string bg3 = "~/bg3.jpg";
+    string bg2 = "~/bg2.jpg";
+
+   
+}
+<body class="nav-md" id="myBodyBG3" style=" ">
+    <div class="container body" id="myBodyBG2">
+        <div class=" main_container" id="myBodyBG2" style="height: 50px">
+            <div class="col-md-3 left_col" style="height: 1220px;overflow:auto" id="myBodyBG2">
+                <div class="left_col scroll-view" id="myBodyBG2">
+                    <div class="navbar nav_title" style="border: 0;" id="myBodyBG2">
+                        <div align="left"><img src="~/logo.jpg" class="logo" style="border: 0;top:0px;left:0px;z-index:11" /></div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <!-- /menu profile quick info -->
+                    <!-- sidebar menu -->
+                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+                        <div class="menu_section" id="myBodyBG2">
+                            
+                            <ul class="nav side-menu">
+                                <li>
+                                    <a href="~/Home/Home" style="color: #cd5c5c"><i class="fa fa-upload"></i> Valuation Requests</a>
+                                </li>
+                                @{
+                                    if (Session["UserGroup"].ToString() == "3" || Session["UserGroup"].ToString() == "2" || Session["UserGroup"].ToString() == "1") //Not credit user
+                                    {
+                                       
+                                         
+                                    }
+                                    <li>
+                                        <a href="~/Reports/ValuationRequest" style="color: #cd5c5c"><i class="fa fa-file"></i> Report</a>
+                                    </li>
+
+}
+                                
+                             
+                                @{
+                                    /*
+                                    if (Session["UserGroup"].ToString() == "5")
+                                    {
+                                        <li>
+                                            <a style="color: #cd5c5c" href="#">Reports<span class="fa fa-chevron-down" style="color:lightblue"></span></a>
+                                            <ul class="nav child_menu">
+                                                <li class="sub_menu"><a style="color: #cd5c5c" href="~/Reports/CashCollection">Cash Collection</a></li>
+                                                <li class="sub_menu"><a style="color: #cd5c5c" href="~/Reports/CashDelivery">Cash Delivery</a></li>
+                                                <li class="sub_menu"><a style="color: #cd5c5c" href="~/Reports/CashBookBalance">Cash Book Balance</a></li>
+                                                <li class="sub_menu"><a style="color: #cd5c5c" href="~/Reports/SignableDocument">Signable Document</a></li>
+                                                <li class="sub_menu"><a style="color: #cd5c5c" href="~/Reports/TicketSummary">Ticket Summary</a></li>
+
+                                            </ul>
+                                        </li>
+                                    }
+                                    */
+                                }
+                                
+
+ 
+  
+
+                                 
+                                
+
+                                
+                                
+
+                               
+
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- /sidebar menu -->
+
+                </div>
+            </div>
+            <!-- top navigation -->
+            <div class="top_nav">
+
+                <div class="nav_menu" id="myBodyBG2" style=" height: 51px; padding-left: 0px; border-color: #000;z-index:9">
+                    <table width="100%" border="0">
+                        <tr>
+
+                            <td width="65%" style="font-size: 28px; font-weight: bolder; color: #cd5c5c; text-shadow: 1px 1px indianred; padding-left: 200px" align="center">Property Valuation Request System</td>
+                            <td width="35%" align="right" style="padding-right:5px">
+                                <ul class="nav navbar-nav navbar-right" style="padding-left:0px">
+                                    <li class="dropdown-menu" style="border:0">
+                                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="myBodyBG2" style="border: 0; height: 45px; color: #cd5c5c">
+                                            <font size="3px" style="color: #cd5c5c">
+                                                @{
+                                                    if (Session["UserName"] != null)
+                                                    {
+                                                        @(Session["UserName"].ToString())
+                                                    }
+                                                }
+
+                                            </font>
+                                            <span class=" fa fa-angle-down" style="color: #cd5c5c"></span>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-usermenu pull-right" style="border-color: #000" id="myBodyBG2">
+
+
+
+                                           
+                                            <li>
+
+                                                <a href="https://auth.zemenbank.com/auth/realms/test/account/" style="color: #cd5c5c">SSO Account Home</a>
+                                            </li>
+                                            <li>
+
+                                                <a href="~/Home/Logout" style="color: #cd5c5c">Log Out</a>
+                                            </li>
+
+
+                                        </ul>
+
+                                    </li>
+
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                    <a id="menu_toggle" data-toggle="offcanvas" role="button"><i class="fa fa-bars" style="font-size:22px;color:black"></i></a>
+
+                </div>
+            </div>
+            <!-- /top navigation -->
+            <!-- page content -->
+            <div class="right_col" role="main" style="color: black; background-color:#fff">
+                <iframe id="refreshFrame" style="display:none"></iframe>
+                @RenderBody()
+            </div>
+            <!-- /page content -->
+            <!-- footer content -->
+            @*<footer style="background-color: lightblue">
+                <div class="pull-right" style="background-color:lightblue;color:#000">
+                    ECX System <a href="http://www.zemenbank.com" style="color:blue">Zemen Bank</a>
+                </div>
+                <div class="clearfix"></div>
+            </footer>*@
+
+            <!-- /footer content -->
+        </div>
+    </div>
+
+
+    <!-- jQuery -->
+    <!-- Jquery text editor -->
+    <script src="~/JQTE/jquery-te-1.4.0.min.js"></script>
+    <!-- FastClick -->
+    <script src="~/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="~/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="~/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- gauge.js -->
+    <script src="~/vendors/gauge.js/dist/gauge.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="~/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+    <script src="~/vendors/iCheck/icheck.min.js"></script>
+    <!-- Skycons -->
+    <script src="~/vendors/skycons/skycons.js"></script>
+    <!-- Flot -->
+    <script src="~/vendors/Flot/jquery.flot.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="~/vendors/Flot/jquery.flot.resize.js"></script>
+    <!-- Flot plugins -->
+    <script src="~/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="~/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="~/vendors/flot.curvedlines/curvedLines.js"></script>
+    <!-- DateJS -->
+    <script src="~/vendors/DateJS/build/date.js"></script>
+    <!-- JQVMap -->
+    <script src="~/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="~/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="~/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="~/vendors/moment/min/moment.min.js"></script>
+    <script src="~/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- Custom Theme Scripts -->
+    <script src="~/build/js/custom.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <!-- Dashboard -->
+    <script src="~/Scripts/dashboard.js"></script>
+
+
+
+
+
+    @*<link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
+    <link href="~/Content/datepicker3.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>*@
+
+    <link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
+    <link href="~/Content/datepicker3.css" rel="stylesheet" />
+    
+    <script src="~/Scripts/bootstrap-datepicker2.min.js"></script>
+    <script src="~/Scripts/FileSaver.js"></script>
+    <script src="~/Scripts/jquery.wordexport.js"></script>
+    <script>
+        var educertid = 0;
+    </script>
+    <script>
+    var userIsActive = false;
+    var lastActivityTimestamp = Date.now();
+
+
+    function refreshSession() {
+
+        if (!hasUserBeenInactiveFor(300000)) {
+            var refreshFrame = document.getElementById("refreshFrame");
+            refreshFrame.onload = function () {
+                var response = refreshFrame.contentDocument.body.innerText;
+                var refreshedTokens = JSON.parse(response);
+                console.log(refreshedTokens)
+            };
+
+            refreshFrame.src = "/Home/RefreshSession"; // URL to your refresh endpoint
+        }
+
+    }
+
+    // Set userIsActive to true when user interacts with the page
+    document.addEventListener("mousemove", function () {
+        userIsActive = true;
+        var callReferesh = false;
+        if (hasUserBeenInactiveFor(300000)) {
+            callReferesh = true;
+        }
+        lastActivityTimestamp = Date.now();
+
+        if (callReferesh) {
+            refreshSession();
+        }
+    });
+
+
+    setInterval(refreshSession, 180000);
+
+    function hasUserBeenInactiveFor(timeout) {
+        return (Date.now() - lastActivityTimestamp) > timeout;
+    }
+
+    function updateSession(tokens) {
+        // Update your session with the new tokens here
+    }
+    </script>
+
+</body>
+
+@{
+    DateTime today = DateTime.Today;
+    int uid=int.Parse(Session["UserID"].ToString());
+    string ug=Session["UserGroup"].ToString();
+    /*
+    List<University.Models.Notification> notifications=null;
+    University.Models.ECXEntities1 db3 = new University.Models.ECXEntities1();
+    int notificationcount = (from not in db3.Notifications
+                             where (not.UserID == uid && not.UserGroup == "") || (not.UserGroup != "" && not.UserGroup==ug)
+                          where not.Deadline >= today
+                          select not.Id).Count();
+    if (notificationcount > 0)
+    {
+        notifications = (from not2 in db3.Notifications
+                         where (not2.UserID == uid && not2.UserGroup == "") || (not2.UserGroup != "" && not2.UserGroup == ug)
+                  where not2.Deadline >= today
+                         select not2).ToList();
+    }
+    if (notificationcount > 0)
+    {
+        string notificationsscript = "<script>var notifications = Array('" + notificationcount + "').fill('a'); ";
+        int i=0;
+        foreach (var notification in notifications)
+        {
+             notificationsscript += "notifications[" + i + "]=['" + notification.Title + "','" + notification.Message + "','" + notification.url + "'];";
+            i++;
+        }
+            notificationsscript += "</script>";
+       
+        WriteLiteral(notificationsscript);
+    }
+    */
+}
+
+<script type="text/javascript">
+
+    var closednotifications = '';
+    var currentnotificationindex = 0;
+    var maximumindex = notifications.length - 1;
+
+    function displayNotification(currindex, maxindex, closednoti)
+    {
+
+        if ('@Session["ClosedNotifications"]' != '' && closednoti=='')
+        {
+            closednoti = '@Session["ClosedNotifications"]';
+        }
+
+        var closedsplit = closednoti.split(',');
+
+        var closed = false;
+        if (closedsplit.length > 1)
+        {
+            for(i=0;i<closedsplit.length;i++)
+            {
+                if(closedsplit[i]==currindex)
+                {
+                    closed = true;
+                }
+            }
+
+        }
+        var title = notifications[currindex][0];
+        var message = notifications[currindex][1];
+        var url = notifications[currindex][2];
+        if (!closed) //if not closed by the user
+        {
+            $.notify({
+                // options
+                title: title,
+                message: message,
+                url: url,
+                target: '_blank',
+                index: currindex
+            }, {
+                // settings
+                element: 'body',
+                position: null,
+                type: "info",
+                allow_dismiss: true,
+                newest_on_top: false,
+                showProgressbar: false,
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 9999,
+                delay: 15000,
+                timer: 1000,
+                url_target: '_blank',
+                mouse_over: null,
+                animate: {
+                    enter: 'animated fadeInRight',
+                    exit: 'animated fadeOutRight'
+
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+                icon_type: 'class',
+                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert" id="myBodyBG3" style="color:darkred">' +
+                    '<div id="but"><button type="button" aria-hidden="true" class="close" data-notify="dismiss" onclick="reloadSession();return false;">×</button></div>' +
+                    '<span data-notify="icon"></span> ' +
+                    '<span data-notify="title"><b><u>{1}</u></b></span><br /> ' +
+                    '<span data-notify="message">{2}</span>' +
+                    '<div class="progress" data-notify="progressbar">' +
+                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                    '</div>' +
+                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
+                '</div>'
+            });
+
+        }
+        if (currindex == maxindex) {
+            currentnotificationindex = 0;
+        }
+        else {
+            currentnotificationindex = currentnotificationindex + 1;
+        }
+        setTimeout(function () { displayNextNotification(); }, 30000);
+
+    }
+
+
+    function displayNextNotification()
+    {
+        displayNotification(currentnotificationindex, maximumindex, closednotifications);
+    }
+    if (notifications.length > 0) {
+        setTimeout(function () { displayNextNotification(); }, 3000);
+
+    }
+
+
+
+  
+ 
+    function reloadSession() {
+        var rdata = maximumindex;
+        if (currentnotificationindex != 0) {
+            rdata = currentnotificationindex - 1;
+        } // reading the index of the closed notification
+
+        var url = '@Url.Action("reloadSession", "Home")'; // Don't hard code your url's!
+        var names = $("#but"); // cache it
+        var myObject = { statusid: rdata };
+        $.getJSON(url, myObject, function (response) {
+            closednotifications = response;
+        });
+    }
+</script>
+    </html>

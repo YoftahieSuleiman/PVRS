@@ -1,0 +1,345 @@
+﻿@model IEnumerable<University.Models.EstimationRequest>
+@{
+  
+    ViewBag.Title = "ECX";
+}
+<style type="text/css">
+    h1 {
+    font-size:26px;
+    font-weight:bold;
+    }
+
+    .unauthorized {
+        animation: unauthorized 3s linear infinite;
+        font-size: larger;
+        color:indianred;
+    }
+
+    @@keyframes unauthorized {
+        50% {
+            opacity: 0;
+        }
+    }
+    a:visited {
+        color: #0254EB;
+    }
+
+    a.morelink {
+        text-decoration: none;
+        outline: none;
+    }
+
+    .morecontent span {
+        display: none;
+    }
+
+    .comment {
+        width: 400px;
+        background-color: #f0f0f0;
+        margin: 10px;
+       
+    }
+
+
+    </style>
+
+ <div style="color:red">
+    @{
+        if (TempData["ErrorMEssage"] != null)
+        {
+            Write(TempData["ErrorMEssage"]);
+        }
+    }
+</div>
+<br /><br />
+<div class="row" style="width:100%;vertical-align:top" align="left">
+    
+    @{if (Session["UserGroup"].ToString() == "3")
+    {
+    <a href="#" onclick="UploadDocument()" class="linkEffect" style="width:200px">Request Valuation</a>
+    <br /><br />
+    }
+}
+    <div id="datatable-buttons_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer" style="overflow: auto; width: 100%; padding: 5px; color: #000; height: 650px; ">
+        <div id="datatable-buttons_filter" class="dataTables_filter"></div>
+
+        <table id="datatable-buttons" class="table table-striped table-bordered dataTable no-footer dtr-inline" role="grid" aria-describedby="datatable-buttons_info" style="width: 100%;color:#000;background-color:white">
+            <thead>
+                <tr role="row">
+                    <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                        Requesting Branch
+                    </th>
+                    <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                        Applicant Name
+                    </th>
+                    <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                        Mortgager Name
+                    </th>
+                    <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                        Uploaded By
+                    </th>
+                     <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                        Date Uploaded
+                    </th>
+                    <th rowspan="1" class="sorting_asc" tabindex="0" aria-controls="datatable-buttons" colspan="1" style="width: 161px;" aria-sort="ascending" aria-label="LC NO.: activate to sort column descending">
+                        Status
+                    </th>
+                    
+                    <th>
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int x = 0;}
+                @foreach (var item in Model)
+                {
+                   
+                    x++;
+
+                    if (x % 2 != 0)
+                    {
+
+                        @Html.Raw("<tr class='odd' role='row'>");
+                    }
+                    else
+                    {
+                        @Html.Raw("<tr class='even' role='row'>")
+                }
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestingBranch)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.ApplicantName)
+                </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MortgagerName)
+                    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.User2.UserName)
+    </td>
+    <td>
+        @(item.DateUploaded.ToString("MMM dd,yyyy"))
+    </td>
+    <td>
+        @(item.luDocumentStatu.Status)    </td>
+    
+                    <td>
+                        <a href="#" class="linkEffect" onclick="ShowDetail('@(item.Id)')">Detail</a>
+                        @{
+                    if ((item.Status == 2 || item.Status == 3) && Session["UserGroup"] != null && Session["UserGroup"].ToString() == "1")
+                    {
+                        <a href="#" onclick='AssignRequest("@(item.Id)")' class="linkEffect">Assign</a>
+                         <a href="#" onclick='Respond("@(item.Id)")' class="linkEffect">Respond</a>
+
+                    }
+                    if (item.Status <= 2 && Session["UserGroup"] != null && Session["UserGroup"].ToString() == "3")
+                    {
+                        <a href="../Upload/Index/@(item.Id)" class="linkEffect">Documents</a>
+                    }
+                    if (item.Status == 2 && Session["UserGroup"] != null && Session["UserGroup"].ToString() == "5")//Engineering csr and pending status
+                    {
+                        <a href="#" onclick='HardCopyStatus("@(item.Id)")' class="linkEffect" style="width:130px">Hardcopy Status</a>
+
+                    }
+                    if ((item.Status == 4 || item.Status==6) && Session["UserGroup"] != null && Session["UserGroup"].ToString() == "1")//Engineering admin and inspected status
+                    {
+                        <a href="#" onclick='FinalReport("@(item.Id)")' class="linkEffect" style="width:130px">Final Report</a>
+
+                    }
+
+                  
+                    if ((item.Status == 3  || item.Status==4 || item.Status==5) && Session["UserID"] != null && item.AssignedTo == int.Parse(Session["UserID"].ToString()) && Session["UserGroup"].ToString()=="2")
+                    {
+    <a href="#" onclick='Evaluate("@(item.Id)")' class="linkEffect">Evaluate</a>
+
+                    }
+                    if (item.Status == 6 && item.EstimationReport != "")
+                    {
+                        <a href="@(item.EstimationReport)" target="_blank" class="linkEffect" style="width:180px">View Final Report</a>
+
+                    }
+
+
+}
+
+                    </td>
+                    
+                    @Html.Raw("</tr>");
+                }
+                </tbody>
+            </table>
+        </div>
+        
+
+
+    <div class="modal fade" id="photoEditor" style="height:600px">
+        <div class="modal-dialog" style="height:600px">
+            <div class="modal-content" style="height:600px">
+                <div class="modal-header" id="myBodyBG2" style="height:50px">
+                    <div style="width:100%" align="right"><table><tr><td><h1></h1></td><td>&nbsp;&nbsp;&nbsp;</td><td><h1><a href="#" class="close" style="color:#fff" onclick="javascript:closeModal()">x</a></h1></td></tr></table></div>
+                    <h3 class="modal-title" id="modaltitle" style="text-align:center;color:#cd5c5c;top:15px;left:200px;position:absolute"></h3>
+                </div>
+                <div class="modal-body" id="modalbodydiv" style="height:500px;overflow:auto;width:100%">
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+</div>  
+@{
+    if (Session["BranchName"] != null && Session["BranchName"].ToString() != "")
+    {
+       // WriteLiteral("<script>var branch=" + Session["BranchName"].ToString() + ";</script>");
+    }
+}
+<script type="text/javascript">
+    var AssignRequest = function (reqid) {
+        $("#modaltitle").text("Change Document");
+        var url = "";
+        url = "../Upload/Assign?reqid=" + reqid;
+
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+    var Respond = function (reqid) {
+        $("#modaltitle").text("Respond");
+        var url = "";
+        url = "../Upload/Respond?reqid=" + reqid;
+
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+    var Evaluate = function (reqid) {
+        $("#modaltitle").text("Evaluate");
+        var url = "";
+        url = "../Upload/Evaluate?reqid=" + reqid;
+
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+    
+    var HardCopyStatus = function (reqid) {
+        $("#modaltitle").text("Respond");
+        var url = "";
+        url = "../Upload/HardCopyStatus?reqid=" + reqid;
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+    var FinalReport = function (reqid) {
+        $("#modaltitle").text("Respond");
+        var url = "";
+        url = "../Upload/FinalReport?id=" + reqid;
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+    
+    $(document).ready(function () {
+
+        var showChar = 300;
+        var ellipsestext = "...";
+        var moretext = "more";
+        var lesstext = "less";
+        $('.more').each(function () {
+            var content = $(this).html();
+
+            if (content.length > showChar) {
+
+                var c = content.substr(0, showChar);
+                var h = content.substr(showChar, content.length - showChar);
+
+                var html = c + '<span class="moreellipses">' + ellipsestext + '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+
+                $(this).html(html);
+            }
+
+        });
+
+        $(".morelink").click(function () {
+            if ($(this).hasClass("less")) {
+                $(this).removeClass("less");
+                $(this).html(moretext);
+            } else {
+                $(this).addClass("less");
+                $(this).html(lesstext);
+            }
+            $(this).parent().prev().toggle();
+            $(this).prev().toggle();
+            return false;
+        });
+
+
+
+
+    });
+    //var userid=@(Session["UserID"].ToString());
+    var UploadDocument = function () {
+
+
+
+
+        $("#modaltitle").text("Request Valuation");
+        var url = "";
+        url = "../Upload/CreateRequest";
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+    var ShowDetail = function (id) {
+
+
+
+
+        $("#modaltitle").text("Request Valuation Detail");
+        var url = "";
+        url = "../Upload/ValuationRequestDetail/"+id;
+
+        $("#modalbodydiv").load(url, function () {
+            $("#photoEditor").modal("show");
+        })
+
+
+    }
+
+    var closeModal = function () {
+        if (confirm("Are you sure you want to close this form? Click cancel if you want to stay and save your work")) {
+            document.getElementById("modalbodydiv").innerHTML = "";
+            $("#photoEditor").modal("hide");
+        }
+    }
+</script>

@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "Valuation Request";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td {
+        height: 28px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "assignRequest", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+   
+    
+
+    <input type="hidden" name="EstimationRequestId" id="EstimationRequestId" value='@TempData["requestid"]' />
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    @Html.Raw(TempData["requestinfo"])
+    <table align="center" style="color:black" class="tblForm">
+        <tr>
+            <td><b>Assign To: &nbsp;</b></td>
+            <td>
+                @{
+                    if(TempData["assignedto"] == null || TempData["assignedto"].ToString()==""){
+                        @Html.DropDownList("userid","")<br />
+                }
+                    else{
+                        @Html.DropDownList("userid")<br />
+
+                    }
+                }
+            </td>
+            <td><div id="useridmsg" style="color:red"></div></td>
+        </tr>
+        <tr>
+            <td><b>Valuation Date: &nbsp;</b></td>
+            <td>
+                <input type='text' class="date-picker" name='ValuationDate' id='ValuationDate' value='@DateTime.Today.ToString("MM/dd/yyyy")' readonly />
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><b>Valuation Time: &nbsp;</b></td>
+            <td>
+                <select id="ValuationTime"><option>Morning</option><option>Afternoon</option></select>
+            </td>
+            <td></td>
+        </tr>
+
+
+
+
+
+
+        <tr>
+            <td colspan="3">
+                <input type="button" value="   Assign   " class="linkEffect" onclick="assign()" />
+                <div id="status" style="color:blue"></div>
+            </td>
+
+        </tr>
+    </table><br />
+    <hr />
+    
+    
+
+
+
+
+}
+<script type="text/javascript">
+  
+
+        // This will make every element with the class "date-picker" into a DatePicker element
+        $('.date-picker').datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true
+        });
+
+
+    
+
+    function validateForm() {
+        document.getElementById("useridmsg").innerHTML = "";
+        if (document.getElementById("userid").value == "") {
+            document.getElementById("useridmsg").innerHTML = "Select assigned user.";
+            return false;
+        }
+
+
+
+
+
+        return true;
+
+    }
+
+    function assign() {
+        document.getElementById("status").innerHTML = "";
+        // Checking whether FormData is available in browser
+        if (validateForm()) {
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+
+            fileData.append("userid", document.getElementById("userid").value);
+            fileData.append("requestid", document.getElementById("EstimationRequestId").value);
+            fileData.append("username", $("#userid option:selected").text());
+            fileData.append("ValuationDate", document.getElementById("ValuationDate").value);
+            fileData.append("ValuationTime", document.getElementById("ValuationTime").value);
+
+
+
+
+            $.ajax({
+                url: '../Upload/Assign',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result == "Error Occured while processing your request. Please try again.") {
+                        document.getElementById("status").innerHTML = result;
+
+                    }
+                    else {
+
+                        document.getElementById("status").innerHTML = "Success";
+                    }
+                    location.reload();
+
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            //alert("FormData is not supported.");
+        }
+
+    }
+
+
+</script>
+
+
+
+
+

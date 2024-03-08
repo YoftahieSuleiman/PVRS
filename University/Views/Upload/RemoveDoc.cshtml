@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Valuation Request";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td {
+        height: 28px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "changeDocument", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    <table align="center" style="color:black" class="tblForm">
+         <tr>
+            <td><b>Are you sure you want to remove? &nbsp;</b></td>
+            <td>
+               
+            </td>
+            <td></td>
+        </tr>
+       
+
+        <tr>
+            <td colspan="3">
+                <input type="button" value="   Yes! Remove it!   " class="linkEffect" onclick="removeDocument()" style="width:250px" /> &nbsp;&nbsp;<a href="#" onclick="$('#photoEditor').modal('hide');" class="linkEffect">   No   </a>
+                <div id="status" style="color:blue"></div>
+            </td>
+
+        </tr>
+    </table><br />
+    
+    
+
+
+
+
+}
+<script>
+
+
+
+
+
+
+    function removeDocument() {
+        document.getElementById("status").innerHTML = "";
+        // Checking whether FormData is available in browser
+
+
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+
+
+            // Adding one more key to FormData object
+            fileData.append('path', '@(TempData["path"])');
+        fileData.append('documentid', '@(TempData["documentid"])');
+        
+            $.ajax({
+                url: '../RemoveDoc',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result == "Error Occured while processing your request. Please try again.") {
+                        document.getElementById("status").innerHTML = result;
+
+                    }
+                    else {
+
+                        document.getElementById("status").innerHTML = "Successfully removed document.";
+                        $("#photoEditor").modal("hide");
+                        location.reload();
+                    }
+
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+
+        }
+
+
+</script>
+
+

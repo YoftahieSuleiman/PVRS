@@ -1,0 +1,256 @@
+﻿
+@{
+    ViewBag.Title = "Valuation Request";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td { height: 28px; }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "createRequest", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    <table align="center" style="color:black" class="tblForm">
+        <tr>
+            <td><b>Applicant Name &nbsp;</b></td>
+            <td>
+                <input type="text" name="ApplicantName" id="ApplicantName" /><br />
+            </td>
+            <td><div style="color:red" id="applicantnamemsg"></div></td>
+        </tr>
+        
+
+        <tr>
+            <td><b>Mortgager Name &nbsp;</b></td>
+            <td>
+                <input type="text" name="MortgagerName" id="MortgagerName" /><br />
+            </td>
+            <td><div style="color:red" id="mortgagernamemsg"></div></td>
+        </tr>
+
+        <tr>
+            <td><b>Estimation Place &nbsp;</b></td>
+            <td>
+                <select name="EstimationAddress1" id="EstimationAddress1" >
+                    <option>Addis Ababa</option><option>Afar Region</option><option>Amhara Region</option><option>Benishangul-Gumuz Region</option>
+                    <option>Central Ethiopia Regional State</option><option>Dire Dawa</option><option>Gambela Region</option><option>Harari Region</option>
+                    <option>Oromia Region</option><option>Sidama Region</option><option>Somali Region</option><option>South Ethiopia Regional State</option>
+                    <option>South West Ethiopia Peoples Region</option><option>Tigray Region</option>
+                </select>&nbsp;&nbsp;
+                <textarea type="text" name="EstimationAddress2" id="EstimationAddress2" cols="30" rows="5"></textarea><br />
+                <br />
+            </td>
+            <td><div style="color:red" id="estimationplacemsg"></div></td>
+        </tr>
+
+        <tr>
+            <td><b>Customer Type &nbsp;</b></td>
+            <td>
+                @Html.DropDownList("CustomerType")<br />
+            </td>
+            <td></td>
+        </tr>
+        
+        <tr>
+            <td><b>Property Type &nbsp;</b></td>
+            <td>
+                @Html.DropDownList("PropertyType")<br />
+            </td>
+            <td></td>
+        </tr>
+
+        <tr>
+            <td><b>Valuation Purpose &nbsp;</b></td>
+            <td>
+                @Html.DropDownList("ValuationPurpose")<br />
+            </td>
+            <td></td>
+        </tr>
+
+
+        <tr>
+            <td><b>Hard Copy Files &nbsp;</b></td>
+            <td>
+                <textarea name="HardCopyFiles" id="HardCopyFiles" cols="30" rows="5"></textarea><br />
+            </td>
+            <td><div style="color:red" id="mortgagernamemsg"></div></td>
+        </tr>
+       
+        <tr>
+            <td>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("<div style='display:none'>");
+
+    }
+                }
+            <b>Hard Copy Status &nbsp;</b>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("</div>");
+    }
+                }
+            </td>
+            <td>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("<div style='display:none'>");
+
+    }
+                }
+                <select><option></option><option>Submitted</option><option>Not Submitted</option></select><br />
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("</div>");
+    }
+                }
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("<div style='display:none'>");
+
+    }
+                }
+            <b>CSR Remark &nbsp;</b>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("</div>");
+    }
+                }
+            </td>
+            <td>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("<div style='display:none'>");
+
+    }
+                }
+                <textarea name="CSRRemark" id="CSRRemark" cols="30" rows="5"></textarea><br />
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("</div>");
+    }
+                }
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("<div style='display:none'>");
+
+    }
+                }
+            <b>Estimation Report&nbsp;</b>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("</div>");
+    }
+                }
+            </td>
+            <td>
+                @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("<div style='display:none'>");
+
+    }
+                }
+                <input type="file" name="EstimationReportDoc" id="EstimationReportDoc" /><input type="hidden" name="EstimationReport" id="EstimationReport" /><br /></td>
+            @{
+    if (Session["UserGroup"].ToString() != "5")
+    {
+        WriteLiteral("</div>");
+    }
+            }
+            <td></td>
+        </tr>
+       
+        <tr>
+            <td colspan="3">
+                <input type="submit" value="Request" class="linkEffect" style="border:0" />
+
+            </td>
+
+        </tr>
+    </table>
+
+
+
+}
+<script>
+
+    function validateForm() {
+
+
+
+        if (document.getElementById("ApplicantName").value == "") {
+            document.getElementById("applicantnamemsg").innerHTML = "Applicant name is required.";
+            return false;
+        }
+        if (document.getElementById("MortgagerName").value == "") {
+            document.getElementById("mortgagernamemsg").innerHTML = "Mortgager name is required.";
+            return false;
+        }
+        if (document.getElementById("EstimationAddress2").value == "") {
+            document.getElementById("estimationplacemsg").innerHTML = "Estimation Place is required.";
+            return false;
+        }
+
+
+        return true;
+
+    }
+    function reloadPropertyTypes(x, customerType) {
+
+        var url = '@Url.Action("FetchPropertyTypes", "Upload")'; // Don't hard code your url's!
+        var names = $(x); // cache it
+        var myObject = { customerType: customerType };
+        //alert(JSON.stringify(myObject))
+        $.getJSON(url, myObject, function (response) {
+            names.empty(); // remove any existing options
+            //names.append("<option></option>");
+            var i = -1;
+            $.each(response, function (res) {
+                i++;
+                names.append($("<option value='" + response[i].Id + "'>" + response[i].Type + "</option>"));
+
+            });
+        });
+
+    }
+
+    $('#CustomerType').change(function () {
+        var customerType = document.getElementById("CustomerType").value;
+
+        var x = "#PropertyType";
+        //reloadTitle('#Position2');
+
+        reloadPropertyTypes(x, customerType);
+    });
+</script>

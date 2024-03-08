@@ -1,0 +1,7 @@
+﻿
+@model System.Decimal?
+
+<div class="editor-field">
+    @Html.TextBox("", String.Format("{0:#,##0.######}", (Model == Decimal.MinValue) ? null : Model), new { @class = "text" })
+</div>
+

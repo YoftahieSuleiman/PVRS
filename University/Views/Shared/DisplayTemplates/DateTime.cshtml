@@ -1,0 +1,9 @@
+﻿@model System.DateTime?
+
+@{
+  
+       
+      @Html.Label("", String.Format("{0:dd/MM/yyyy}", (Model == DateTime.MinValue) ? null : Model), new { style = "font-weight:normal" })
+
+    
+}

@@ -1,0 +1,134 @@
+﻿
+<div style="color: goldenrod; font-family: Verdana; font-size: larger; font-stretch: semi-condensed;"><b><u>Cash Collection report</u></b></div>
+<script>
+    function filterReport() {
+        var va = validateForm();
+        if (va) {
+            $("#reportcontent").empty().html('<img src="../Content/loading.gif" align="center" width="100%" height="500px" />');
+            //alert(type1+", "+type2+", "+date+", "+currency);
+
+            var dataString = { type1: type1, type2: type2, currency: currency, date: date };
+          //  var dataString = $("#form0").serialize();
+
+            var action = $("#form0").attr("action");
+
+
+            $.ajax({
+                type: "POST",
+                url: action,
+                async: false,
+                data: dataString,
+                dataType: "text", //change to your own, else read my note above on enabling the JsonValueProviderFactory in MVC
+                //contentType: contentType,
+                //processData: processData,
+                success: function (data) {
+                    $("#reportcontent").html(data);
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    document.getElementById("reportcontent").innerHTML = errorThrown;
+
+                }
+            });
+        }
+        else {
+
+        }
+    }
+
+    $("body").on("click", "#filterBtn", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        filterReport();
+        
+    });
+</script>
+
+@using (Ajax.BeginForm("TicketSummaryFiltered", "Reports", new AjaxOptions { HttpMethod = "POST" }))
+{
+   
+
+    <div style="background-color:lightblue;padding:10px;  width: 100%">
+        
+      
+        Type: <select id="type1"><option>Collection</option><option>Supply</option></select> &nbsp;&nbsp;<select id="type2"><option>FCY</option><option>LCY</option></select> &nbsp;&nbsp;@Html.DropDownList("Currencies")&nbsp;&nbsp;Date: <input type='text' class="date-picker" name='date' id='date' value='@DateTime.Today.ToString("MM/dd/yyyy")' readonly /> &nbsp;&nbsp; <a href="#" class="linkEffect" id="filterBtn">Filter</a>
+
+        <div style="color:red" id="errorMessage"></div>
+
+        
+    </div>
+}
+
+<div id="reportcontent">
+   
+
+
+</div>
+
+<script type="text/javascript">
+
+    //$("#UserId").selectpicker('render');
+    // $("#asofdate").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    //  $("#From").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    // $("#To").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    
+    var type1 = "", type2 = "",date = "",currency="";
+    $(function () {
+
+        // This will make every element with the class "date-picker" into a DatePicker element
+        $('.date-picker').datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true
+        });
+
+
+    })
+
+  
+    function validateForm() {
+       
+        type1 = document.getElementById("type1").value;
+        type2 = document.getElementById("type2").value;
+        date = document.getElementById("date").value;
+        currency = document.getElementById("Currencies").value;
+        //alert(type1+", "+type2+", "+date+", "+currency);
+        return true;
+    }
+
+
+
+
+    function fnExcelReport() {
+        var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+        var textRange; var j = 0;
+        tab = document.getElementById('datatable-buttons'); // id of table
+
+        for (j = 0 ; j < tab.rows.length ; j++) {
+            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+            //tab_text=tab_text+"</tr>";
+        }
+
+        tab_text = tab_text + "</table>";
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html", "replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus();
+            sa = txtArea1.document.execCommand("SaveAs", true, "Cash Collection.xlsx");
+        }
+        else                 //other browser not tested on IE 11
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+        return (sa);
+    }
+
+</script>

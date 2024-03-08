@@ -1,0 +1,160 @@
+﻿@*@model IEnumerable<University.ViewModels.MultiPurposeVM>*@
+@{
+    ViewBag.Title = "Cash Collection Report";
+    Layout = null;
+    
+}
+
+
+
+<div style="overflow: auto; height: 80vh; width: 100%; padding: 5px">
+
+    <button id='btnExport' class='linkEffect'> EXPORT </button><br /><br /><br /><br />
+    <div id="divTableDataHolder" style="width:100%">
+        @{
+            if (ViewBag.Collection != null)
+            {
+                University.Models.CashCollection c = (University.Models.CashCollection)ViewBag.Collection;
+                IEnumerable<University.Models.DenominationDelivered> denominations = (IEnumerable<University.Models.DenominationDelivered>)ViewBag.Denominations;
+                // WriteLiteral(num);
+                WriteLiteral("From: " + ViewBag.BankingCenter + "<Br />");
+                WriteLiteral("To: " + "Treasury and investment department" + "<Br />");
+                WriteLiteral("Branch manager: " + ViewBag.BranchManager + "<Br />");
+                WriteLiteral("Date: " + c.DateCollected.Value.ToString("MMMM dd,yyyy") + "<Br />");
+                WriteLiteral("Currency type: " + c.Currency + "<Br /><Br /><Br />");
+                WriteLiteral("<u><b>Subject:</b>  Collection of printed matters</u><Br /><Br /><Br /><Br /><Br /><Br />");
+                WriteLiteral("<b>Dear Sir,</b><br />");
+                WriteLiteral("We are kindly requesting your office for the collection of printed matters from " + ViewBag.BankingCenter + ", as per the following denomination:<br /><br /><br /><Br /><Br /><Br />");
+                WriteLiteral("<table border='0'><tr><td><u><b>Denomination</b></u></td><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><b>Qty</b></u></td><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><b>Value</b></u></td></tr>");
+                decimal total = 0;
+                foreach (University.Models.DenominationDelivered d in denominations)
+                {
+                    WriteLiteral("<tr><td>" + d.luNote.Note + "</td><td><b>X</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + d.Amount + "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>=</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + (d.luNote.Note * d.Amount).ToString("N2") + "</td></tr>");
+                    total += (d.luNote.Note * d.Amount);
+                }
+                string[] num = total.ToString().Split('.');
+                string birr = University.Controllers.Utilities.NumberToWords(int.Parse(num[0])) + " " + ViewBag.CurrencyName;
+                if (num.Length > 1 && num[1] != "00")
+                {
+                    birr += " and " + University.Controllers.Utilities.NumberToWords(int.Parse(num[1])) + " cents";
+                }
+                birr += " only";
+                WriteLiteral("<tr><td><b>Total</b></td><td></td><td></td><td></td><td align='right'>" + (total.ToString("N2")) + "</td></tr>");
+                WriteLiteral("<tr><td><b>(" + birr + ")</b></td><td></td><td></td><td></td><td align='right'></td></tr>");
+
+                WriteLiteral("</table><br /><br /><br /><Br /><Br /><Br />");
+                string[] receivers = c.AssignedCSO.Split(',');
+                string rec = "Received by";
+
+                foreach (string r in receivers)
+                {
+
+                    rec += ":" + r + "<br />";
+
+                }
+                WriteLiteral(rec);
+
+            }
+            else if (ViewBag.Request != null)
+            {
+                University.Models.CashRequest c = (University.Models.CashRequest)ViewBag.Request;
+                IEnumerable<University.Models.DenominationDelivered> denominations = (IEnumerable<University.Models.DenominationDelivered>)ViewBag.Denominations;
+
+                WriteLiteral("From: " + "Treasury and investment department" + "<Br />");
+                WriteLiteral("To: " + ViewBag.BankingCenter + "<Br />");
+                WriteLiteral("Branch manager: " + ViewBag.BranchManager + "<Br />");
+                WriteLiteral("Date: " + c.DateResponded.Value.ToString("MMMM dd,yyyy") + "<Br />");
+                WriteLiteral("Currency type: " + c.Currency + "<Br />");
+                WriteLiteral("<u><b>Subject:</b>  Supply us printed matters</u><Br /><Br /><Br /><Br /><Br /><Br />");
+                WriteLiteral("<b>Dear Sir,</b><br />");
+                WriteLiteral("Please arrange for the supply of printed matters for our branch as per the following denomination.<br /><br /><br /><Br /><Br /><Br />");
+                WriteLiteral("<table border='0'><tr><td><u><b>Denomination</b></u></td><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><b>Qty</b></u></td><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u><b>Value</b></u></td></tr>");
+                decimal total = 0;
+                foreach (University.Models.DenominationDelivered d in denominations)
+                {
+                    WriteLiteral("<tr><td>" + d.luNote.Note + "</td><td><b>X</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + d.Amount + "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>=</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + (d.luNote.Note * d.Amount).ToString("N2") + "</td></tr>");
+                    total += (d.luNote.Note * d.Amount);
+                }
+                string[] num = total.ToString().Split('.');
+                string birr = University.Controllers.Utilities.NumberToWords(int.Parse(num[0])) + " " + ViewBag.CurrencyName;
+                if (num.Length > 1 && num[1] != "00")
+                {
+                    birr += " and " + University.Controllers.Utilities.NumberToWords(int.Parse(num[1])) + " cents";
+                }
+                birr += " only";
+                WriteLiteral("<tr><td><b>Total</b></td><td></td><td></td><td></td><td align='right'>" + (total.ToString("N2")) + "</td></tr>");
+                WriteLiteral("<tr><td><b>(" + birr + ")</b></td><td></td><td></td><td></td><td align='right'></td></tr>");
+                WriteLiteral("</table><br /><br /><br /><Br /><Br /><Br />");
+                string[] receivers = c.AssignedCSO.Split(',');
+                string rec = "Received by";
+
+                foreach (string r in receivers)
+                {
+
+                    rec += ":" + r + "<br />";
+
+                }
+                WriteLiteral(rec);
+            }
+        }
+</div>
+    </div>
+
+<script type="text/javascript">
+
+    //$("#UserId").selectpicker('render');
+    // $("#asofdate").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    //  $("#From").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    // $("#To").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+   
+    $("#btnExport").click(function (e) {
+
+
+     
+        downloadInnerHtml('SignableDocument.doc', 'divTableDataHolder');
+        e.preventDefault();
+
+    });
+    function downloadInnerHtml(filename, elId) {
+        var elHtml = document.getElementById(elId).innerHTML;
+        var link = document.createElement('a');
+        link.setAttribute('download', filename);
+        link.setAttribute('href', 'data:' + 'text/doc' + ';charset=utf-8,' + encodeURIComponent(elHtml));
+        link.click();
+    }
+    
+
+
+    function fnExcelReport() {
+        var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+        var textRange; var j = 0;
+        tab = document.getElementById('datatable-buttons'); // id of table
+
+        for (j = 0 ; j < tab.rows.length ; j++) {
+            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+            //tab_text=tab_text+"</tr>";
+        }
+
+        tab_text = tab_text + "</table>";
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html", "replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus();
+            sa = txtArea1.document.execCommand("SaveAs", true, "Cash Collection.xlsx");
+        }
+        else                 //other browser not tested on IE 11
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+        return (sa);
+    }
+
+</script>

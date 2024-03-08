@@ -1,0 +1,255 @@
+﻿@*@model IEnumerable<University.ViewModels.MultiPurposeVM>*@
+@{
+    ViewBag.Title = "Cash Collection Report";
+    Layout = null;
+    University.Controllers.Utilities ut = new University.Controllers.Utilities();
+}
+<script src="~/Scripts/FileSaver.js"></script>
+<meta http-equiv="Content-Security-Policy"
+      content="
+      worker-src blob:;
+      child-src blob: gap:;
+      img-src 'self' blob: data:;
+      default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:" />
+<button id='btnExport' class='linkEffect'> EXPORT </button><br /><br /><br /><br />
+
+<div id="divTableDataHolder" style="overflow: auto; height: 80vh; width: 100%; padding: 5px">
+
+    <table id="datatable-buttons" border="0" style="width:100%;border-spacing:0;">
+        <tr><td rowspan="2" colspan="1" ><img src="~/images/zemenlogo.png" /></td><td colspan='3'></td><td colspan ="2" align="right"><b>Date: @(ViewBag.Date)</b></tdcolspan></tr>
+        @{
+            string debitgl = "", creditgl = "", debitdesc="",creditdesc="";
+            Dictionary<string, string> Branch = (Dictionary<string, string>)ViewBag.Branch;
+            decimal total=0;
+            decimal totallcy = 0;
+            if (ViewBag.Collection != null && ViewBag.Type == "FCY")
+            {
+                debitgl="101101";
+                creditgl = "104101";
+                debitdesc = "Cash-Foreign Currency 101201 ";
+                creditdesc = "Cash in Transit-FCY 104201";
+                List<University.Models.CashCollection> c = (List<University.Models.CashCollection>)ViewBag.Collection;
+
+                WriteLiteral("<tr><td colspan='5' align='left' style='padding:100px'><u><b><h3>Foreign Currency Cash Collection Ticket</h3></b></u></td></tr>");
+
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>DEBIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td><b>Amount In FX</b></td><td><b>Amount In LCY</b></td><td><b>In Respect Of</b></td></tr>");
+
+                foreach (University.Models.CashCollection cash in c)
+                {
+                    total += cash.AmountCollected;
+                    totallcy += cash.AmountCollected * cash.ExchangeRate.Value;
+                    string inrespectof = cash.AmountCollected + " " + cash.Currency + " received from " + (Branch[cash.Branch] != null ? Branch[cash.Branch] : "") + " @ " + cash.ExchangeRate;
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + debitgl + "</td><td>" + debitdesc + "(" + cash.Branch + ")</td><td>" + cash.AmountCollected.ToString("N2") + "</td><td>" + decimal.Parse((cash.AmountCollected * cash.ExchangeRate).ToString()).ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+                        
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Debit Total</b></td><td></td><td></td><td>"+total.ToString("N2")+"</td><td>"+totallcy.ToString("N2")+"</td><td></td></tr>");
+                
+                WriteLiteral("<tr style='background-color:cyan'><td colspan='6'><br /><br /><br /></td></tr>");
+
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>CREDIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td><b>Amount In FX</b></td><td><b>Amount In LCY</b></td><td><b>In Respect Of</b></td></tr>");
+                foreach (University.Models.CashCollection cash in c)
+                {
+                    string inrespectof = cash.AmountCollected + " " + cash.Currency + " received from " + Branch[cash.Branch] + " @ " + cash.ExchangeRate;
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + creditgl + "</td><td>" + creditdesc + "</td><td>" + cash.AmountCollected.ToString("N2") + "</td><td>" + decimal.Parse((cash.AmountCollected * cash.ExchangeRate).ToString()).ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Credit Total</b></td><td></td><td></td><td>" + total.ToString("N2") + "</td><td>" + totallcy.ToString("N2") + "</td><td></td></tr>");
+                
+            }
+            else if (ViewBag.Collection != null && ViewBag.Type == "LCY")
+            {
+                debitgl = "101101";
+                creditgl = "104101";
+                debitdesc = "CASH IN VAULTS";
+                creditdesc = "Cash in Transit-LCY";
+                List<University.Models.CashCollection> c = (List<University.Models.CashCollection>)ViewBag.Collection;
+                WriteLiteral("<tr><td colspan='5' align='left' style='padding:100px'><u><b><h3>Local Cash Collection Ticket</h3></b></u></td></tr>");
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>DEBIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td colspan='2'><b>Amount</b></td><td><b>In Respect Of</b></td></tr>");
+                foreach (University.Models.CashCollection cash in c)
+                {
+                    total += cash.AmountCollected;
+                    string inrespectof = "Local cash received from " + Branch[cash.Branch];
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + debitgl + "</td><td>" + debitdesc + "</td><td colspan='2'>" + cash.AmountCollected.ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Debit Total</b></td><td></td><td></td><td colspan='2'>" + total.ToString("N2") + "</td><td></td></tr>");
+
+                WriteLiteral("<tr style='background-color:cyan'><td colspan='6'><br /><br /><br /></td></tr>");
+
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>CREDIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td colspan='2'><b>Amount</b></td><td><b>In Respect Of</b></td></tr>");
+
+                foreach (University.Models.CashCollection cash in c)
+                {
+                    string inrespectof = "Local cash received from "+Branch[cash.Branch];
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + creditgl + "</td><td>" + creditdesc+ "</td><td colspan='2'>" + cash.AmountCollected.ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Credit Total</b></td><td></td><td></td><td colspan='2'>" + total.ToString("N2") + "</td><td></td></tr>");
+
+                WriteLiteral("<tr style='background-color:cyan'><td colspan='6'><br /><br /><br /></td></tr>");
+
+               
+
+
+            }
+            else if (ViewBag.Supply != null && ViewBag.Type == "FCY")
+            {
+                debitgl = "101101";
+                creditgl = "104101";
+                debitdesc = "Cash in Transit-FCY 104201";
+                creditdesc = "Cash-Foreign Currency 101201 ";
+                List<University.Models.CashRequest> c = (List<University.Models.CashRequest>)ViewBag.Supply;
+
+                WriteLiteral("<tr><td colspan='5' align='left' style='padding:100px'><u><b><h3>Foreign Currency Cash Supply Ticket</h3></b></u></td></tr>");
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>DEBIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td><b>Amount In FX</b></td><td><b>Amount In LCY</b></td><td><b>In Respect Of</b></td></tr>");
+                foreach (University.Models.CashRequest cash in c)
+                {
+                    total += cash.AmountDelivered.Value;
+                    totallcy += cash.AmountDelivered.Value * cash.ExchangeRate.Value;
+                    string inrespectof = cash.AmountDelivered + " " + cash.Currency + " supplied to " + (Branch[cash.Branch] != null ? Branch[cash.Branch] : "") + " @ " + cash.ExchangeRate;
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + debitgl + "</td><td>" + debitdesc + "</td><td>" + cash.AmountDelivered.Value.ToString("N2") + "</td><td>" + decimal.Parse((cash.AmountDelivered * cash.ExchangeRate).ToString()).ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Debit Total</b></td><td></td><td></td><td>" + total.ToString("N2") + "</td><td>" + totallcy.ToString("N2") + "</td><td></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td colspan='6'><br /><br /><br /></td></tr>");
+
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>CREDIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td><b>Amount In FX</b></td><td><b>Amount In LCY</b></td><td><b>In Respect Of</b></td></tr>");
+
+                foreach (University.Models.CashRequest cash in c)
+                {
+                    string inrespectof = cash.AmountDelivered + " " + cash.Currency + " supplied to " + Branch[cash.Branch] + " @ " + cash.ExchangeRate;
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + creditgl + "</td><td>" + creditdesc+"("+cash.Branch + ")</td><td>" + cash.AmountDelivered.Value.ToString("N2") + "</td><td>" + decimal.Parse((cash.AmountDelivered * cash.ExchangeRate).ToString()).ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Credit Total</b></td><td></td><td></td><td>" + total.ToString("N2") + "</td><td>" + totallcy.ToString("N2") + "</td><td></td></tr>");
+               
+
+            }
+            else if (ViewBag.Supply != null && ViewBag.Type == "LCY")
+            {
+                debitgl = "104101";
+                creditgl = "101101";
+                debitdesc = "Cash in Transit-LCY";
+                creditdesc = "CASH IN VAULTS";
+                List<University.Models.CashRequest> c = (List<University.Models.CashRequest>)ViewBag.Supply;
+
+                WriteLiteral("<tr><td colspan='5' align='left' style='padding:100px'><u><b><h3>Local Cash Supply Ticket</h3></b></u></td></tr>");
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>DEBIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td colspan='2'><b>Amount</b></td><td><b>In Respect Of</b></td></tr>");
+                foreach (University.Models.CashRequest cash in c)
+                {
+                    total += cash.AmountDelivered.Value;
+                    string inrespectof = "Local cash supplied to " + Branch[cash.Branch];
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + debitgl + "</td><td>" + debitdesc + "</td><td colspan='2'>" + cash.AmountDelivered.Value.ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Debit Total</b></td><td></td><td></td><td colspan='2'>" + total.ToString("N2") + "</td><td></td></tr>");
+
+                WriteLiteral("<tr style='background-color:cyan'><td colspan='6'><br /><br /><br /></td></tr>");
+
+                WriteLiteral("<tr style='background-color:darkgreen'><td colspan='2'></td><td><h4 style='color:#fff'>CREDIT</h4></td><td colspan='3'></td></tr>");
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Branch Code</b></td><td><b>GL Number</b></td><td><b>Description</b></td><td colspan='2'><b>Amount</b></td><td><b>In Respect Of</b></td></tr>");
+                foreach (University.Models.CashRequest cash in c)
+                {
+                    string inrespectof = "Local cash supplied to " + Branch[cash.Branch];
+                    WriteLiteral("<tr style='background-color:cyan'><td>" + cash.Branch + "</td><td>" + creditgl + "</td><td>" + creditdesc + "</td><td colspan='2'>" + cash.AmountDelivered.Value.ToString("N2") + "</td><td>" + inrespectof + "</td></tr>");
+
+                }
+                WriteLiteral("<tr style='background-color:cyan'><td><b>Credit Total</b></td><td></td><td></td><td colspan='2'>" + total.ToString("N2") + "</td><td></td></tr>");
+
+
+            }
+            string[] num = total.ToString().Split('.');
+            string birr = University.Controllers.Utilities.NumberToWords(int.Parse(num[0])) + " " + (ViewBag.Type == "LCY"?"Birr":ViewBag.CurrencyName);
+            if (num.Length > 1 && num[1] != "00")
+            {
+                birr += " and " + University.Controllers.Utilities.NumberToWords(int.Parse(num[1])) + " cents";
+            }
+            birr += " only";
+            WriteLiteral("<tr style='background-color:#FFF'><td><br /><br /><br /><b><h2 style='color:red'>IN RESPECT OF:</h2></b><br /><br /><br /><h2 style='color:red'>AMOUNT IN WORDS:</h2><br />"+birr+"</td><td><b></b></td><td><b></b></td><td><b></b></td><td align='right'><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><b>________________________________</b><br /><h3 style='color:red'>AUTHORIZED SIGNATURE</h3></td></tr>");
+            
+        }
+    </table>
+
+</div>
+
+<script type="text/javascript">
+   
+    
+    //$("#UserId").selectpicker('render');
+    // $("#asofdate").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    //  $("#From").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+    // $("#To").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+   
+    function downloadInnerHtml(filename, elId) {
+        var elHtml = document.getElementById(elId).innerHTML;
+        var link = document.createElement('a');
+        link.setAttribute('download', filename);
+        link.setAttribute('href', 'data:' + 'text/doc' + ';charset=utf-8,' + encodeURIComponent(elHtml));
+        link.click();
+    }
+ //   $("#btnExport2").click(function (e) {
+
+       
+
+ //       //convert image to blob
+ //       fetch("../images/zemenlogo.png").then(response => response.blob())
+ // .then(blob => {
+ //     //document.getElementById("thumbnail").src = URL.createObjectURL(blob);
+ //     $("#datatable-buttons").find("tr").eq(0).find("td").eq(0).append("<img src='"+blob+"' style='display:block;' width='100%' height='auto'/>");
+
+       
+ //   }).then(result => {
+      
+        
+ //downloadInnerHtml('TicketSummary.doc', 'divTableDataHolder');
+ //   e.preventDefault();   
+    
+
+       
+ //   });
+ //   //end conversion 
+
+ //   });
+    $("#btnExport").click(function (e) {
+        $("#divTableDataHolder").wordExport("Ticket Summary");
+    });
+    function fnExcelReport() {
+        var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+        var textRange; var j = 0;
+        tab = document.getElementById('datatable-buttons'); // id of table
+
+        for (j = 0 ; j < tab.rows.length ; j++) {
+            tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+            //tab_text=tab_text+"</tr>";
+        }
+
+        tab_text = tab_text + "</table>";
+        tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+        tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+        tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+        {
+            txtArea1.document.open("txt/html", "replace");
+            txtArea1.document.write(tab_text);
+            txtArea1.document.close();
+            txtArea1.focus();
+            sa = txtArea1.document.execCommand("SaveAs", true, "Cash Collection.xlsx");
+        }
+        else                 //other browser not tested on IE 11
+            sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+        return (sa);
+    }
+
+</script>

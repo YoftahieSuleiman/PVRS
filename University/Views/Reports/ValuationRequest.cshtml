@@ -1,0 +1,346 @@
+﻿@model IEnumerable<University.Models.EstimationRequest>
+
+<div style="color: goldenrod; font-family: Verdana; font-size: larger; font-stretch: semi-condensed;"><b><u>Valuation Report</u></b></div>
+<script>
+    function filterReport() {
+        var va = validateForm();
+        if (va) {
+            $("#reportcontent").empty().html('<img src="../Content/loading.gif" align="center" width="100%" height="500px" />');
+
+            var dataString = { From: From, To: To, Branch: Branch, CustomerType: CustomerType, PropertyType: PropertyType, ValuationPurpose: ValuationPurpose, AssignedTo: AssignedTo, Status: Status, Address: Address };
+          //  var dataString = $("#form0").serialize();
+
+            var action = $("#form0").attr("action");
+
+
+            $.ajax({
+                type: "POST",
+                url: action,
+                async: false,
+                data: dataString,
+                dataType: "text", //change to your own, else read my note above on enabling the JsonValueProviderFactory in MVC
+                //contentType: contentType,
+                //processData: processData,
+                success: function (data) {
+                    $("#reportcontent").html(data);
+
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    document.getElementById("reportcontent").innerHTML = errorThrown;
+
+                }
+            });
+        }
+        else {
+
+        }
+    }
+</script>
+
+@using (Ajax.BeginForm("ValuationRequestFiltered", "Reports", new AjaxOptions { HttpMethod = "POST" }))
+{
+    string datefrom = "", dateto = "";
+  
+  
+    if (TempData["datefrom"] != null)
+    {
+        datefrom = TempData["datefrom"].ToString();
+    }
+    if (TempData["dateto"] != null)
+    {
+        dateto = TempData["dateto"].ToString();
+    }
+   
+
+    <div style="background-color:lightblue;padding:10px;  width: 100%">
+      
+        Branch:@Html.ListBox("Branch", (MultiSelectList)ViewBag.Branch, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        })
+       
+       
+        &nbsp;&nbsp;Customer Type:@Html.ListBox("CustomerType", (MultiSelectList)ViewBag.CustomerType, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        })
+        Property Type:@Html.ListBox("PropertyType", (MultiSelectList)ViewBag.PropertyType, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        })
+        <br />Valuation Purpose:@Html.ListBox("ValuationPurpose", (MultiSelectList)ViewBag.ValuationPurpose, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        })
+        &nbsp;&nbsp;Assigned To:@Html.ListBox("AssignedTo", (MultiSelectList)ViewBag.AssignedTo, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        })
+        &nbsp;&nbsp;Status:@Html.ListBox("Status", (MultiSelectList)ViewBag.Status, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        })
+        <br />
+        Address:@Html.ListBox("Address", (MultiSelectList)ViewBag.Address, new
+        {
+            style = "width:500px;height:250px",
+            @class = "selectpicker",
+            data_show_subtext = "true",
+            data_live_search = "true"
+        }) &nbsp;&nbsp;Date From: <input type='text' class="date-picker" name='from' id='from' value='@DateTime.Today.ToString("MM/dd/yyyy")' readonly /> &nbsp; To: <input type='text' class="date-picker" name='to' id='to' value='@DateTime.Today.ToString("MM/dd/yyyy")' readonly />
+          
+        <a href="#" class="linkEffect" onclick="filterReport();">Filter</a>
+
+        <div style="color:red" id="errorMessage"></div>
+
+        
+    </div>
+}
+<button id='btnExport' onclick='fnExcelReport()' class='linkEffect'> EXPORT </button>
+
+<div id="reportcontent">
+    @{
+        ViewBag.Title = "Valuation Request Report";
+        
+    }
+   
+   
+
+
+
+    <table id="tbl" style="width: 100%;color:#000;background-color:white">
+        <thead>
+            <tr role="row">
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Requesting Branch</b>
+
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Applicant Name</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Mortgager Name</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Estimation Address</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Customer Type</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Property Type</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Valuation Purpose</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Hard Copy Files</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Hard Copy Status</b>
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Manager Response</b>
+                </th>
+
+
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Uploaded By</b>
+
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Date Uploaded</b>
+
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Assigned By</b>
+
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Assigned To</b>
+
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>Status</b>
+
+                </th>
+                <th rowspan="1" colspan="1" style="text-align: center">
+                    <b>CSR Remark</b>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ int x = 0;}
+            @foreach (var item in Model)
+                    {
+
+                        x++;
+
+                        if (x % 2 != 0)
+                        {
+
+                @Html.Raw("<tr class='odd' role='row'>");
+                        }
+                        else
+                        {
+                @Html.Raw("<tr class='even' role='row'>")
+                        }
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestingBranch)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicantName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MortgagerName)
+            </td>
+            <td>
+                @(item.EstimationAddress1+", "+item.EstimationAddress2)
+            </td>
+            <td>
+                @(item.luCustomerType.Type)
+            </td>
+            <td>
+                @(item.luPropertyType.Type)
+            </td>
+            <td>
+                @(item.luValuationPurpose.Purpose)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HardCopyFiles)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HardCopyStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerResponse)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User2.UserName)
+            </td>
+            <td>
+                @(item.DateUploaded.ToString("MMM dd,yyyy"))
+            </td>
+            <td>
+                @(item.User != null ? item.User.UserName:"Not Assigned")
+            </td>
+            <td>
+                @(item.User != null ? item.User1.UserName : "Not Assigned")
+            </td>
+            <td>
+                @(item.luDocumentStatu.Status)
+            </td>
+            <td>
+                @(item.CSRRemark)
+            </td>
+
+
+
+            @Html.Raw("</tr>");
+                    }
+            </tbody>
+        </table>
+            </div>
+
+
+    <script type="text/javascript">
+
+        //$("#UserId").selectpicker('render');
+       // $("#asofdate").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+      //  $("#From").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+       // $("#To").datepicker({ forceParse: false, todayHighlight: true, todayBtn: true, autoclose: true }).keyup(function (e) { if (e.keyCode == 8 || e.keyCode == 46) { this.value = ''; resetDate(this); } });
+        $(function () {
+
+            // This will make every element with the class "date-picker" into a DatePicker element
+            $('.date-picker').datepicker({
+                format: "mm/dd/yyyy",
+                autoclose: true
+            });
+
+
+        })
+        var From = "",To = "",Branch = "", CustomerType = "", PropertyType = "", ValuationPurpose = "", AssignedTo = "", Status = "", Address = "";
+      
+        function validateForm() {
+            if (document.getElementById("from").value != "") {
+                var date = document.getElementById("from").value.split("/");
+                //from = date[1] + "/" + date[0] + "/" + date[2];
+                from = document.getElementById("from").value;
+
+            }
+            if (document.getElementById("to").value != "") {
+                var date = document.getElementById("to").value.split("/");
+                //to = date[1] + "/" + date[0] + "/" + date[2];
+                to = document.getElementById("to").value;
+            }
+            Branch = $('#Branch').val();
+            CustomerType = $('#CustomerType').val();
+            PropertyType = $('#PropertyType').val();
+            ValuationPurpose = $('#ValuationPurpose').val();
+            AssignedTo = $('#AssignedTo').val();
+            Status = $('#Status').val();
+            Address = $('#Address').val();
+            From = $('#from').val();
+            To = $('#to').val();
+          
+            return true;
+        }
+       
+        
+       
+
+        function fnExcelReport() {
+            var tab_text = "<table border='2px'><tr bgcolor='#87AFC6'>";
+            var textRange; var j = 0;
+            tab = document.getElementById('tbl'); // id of table
+
+            for (j = 0 ; j < tab.rows.length ; j++) {
+                tab_text = tab_text + tab.rows[j].innerHTML + "</tr>";
+                //tab_text=tab_text+"</tr>";
+            }
+
+            tab_text = tab_text + "</table>";
+            tab_text = tab_text.replace(/<A[^>]*>|<\/A>/g, "");//remove if u want links in your table
+            tab_text = tab_text.replace(/<img[^>]*>/gi, ""); // remove if u want images in your table
+            tab_text = tab_text.replace(/<input[^>]*>|<\/input>/gi, ""); // reomves input params
+
+            var ua = window.navigator.userAgent;
+            var msie = ua.indexOf("MSIE ");
+
+            if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
+            {
+                txtArea1.document.open("txt/html", "replace");
+                txtArea1.document.write(tab_text);
+                txtArea1.document.close();
+                txtArea1.focus();
+                sa = txtArea1.document.execCommand("SaveAs", true, "Valuation Report.xlsx");
+            }
+            else                 //other browser not tested on IE 11
+                sa = window.open('data:application/vnd.ms-excel,' + encodeURIComponent(tab_text));
+
+            return (sa);
+        }
+
+    </script>
+
+</div>

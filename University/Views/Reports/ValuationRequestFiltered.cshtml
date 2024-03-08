@@ -1,0 +1,138 @@
+﻿@model IEnumerable<University.Models.EstimationRequest>
+    @{Layout = null;}
+
+
+<table id="tbl" style="width: 100%;color:#000;background-color:white">
+    <thead>
+        <tr role="row">
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Requesting Branch</b>
+
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Applicant Name</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Mortgager Name</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Estimation Address</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Customer Type</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Property Type</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Valuation Purpose</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Hard Copy Files</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Hard Copy Status</b>
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Manager Response</b>
+            </th>
+
+
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Uploaded By</b>
+
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Date Uploaded</b>
+
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Assigned By</b>
+
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Assigned To</b>
+
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>Status</b>
+
+            </th>
+            <th rowspan="1" colspan="1" style="text-align: center">
+                <b>CSR Remark</b>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int x = 0;}
+        @foreach (var item in Model)
+        {
+
+            x++;
+
+            if (x % 2 != 0)
+            {
+
+                @Html.Raw("<tr class='odd' role='row'>");
+            }
+            else
+            {
+                @Html.Raw("<tr class='even' role='row'>")
+            }
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestingBranch)
+        </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicantName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MortgagerName)
+            </td>
+            <td>
+                @(item.EstimationAddress1 + ", " + item.EstimationAddress2)
+            </td>
+            <td>
+                @(item.luCustomerType.Type)
+            </td>
+            <td>
+                @(item.luPropertyType.Type)
+            </td>
+            <td>
+                @(item.luValuationPurpose.Purpose)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HardCopyFiles)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HardCopyStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerResponse)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User2.UserName)
+            </td>
+            <td>
+                @(item.DateUploaded.ToString("MMM dd,yyyy"))
+            </td>
+            <td>
+                @(item.User != null ? item.User.UserName : "Not Assigned")
+            </td>
+            <td>
+                @(item.User != null ? item.User1.UserName : "Not Assigned")
+            </td>
+            <td>
+                @(item.luDocumentStatu.Status)
+            </td>
+            <td>
+                @(item.CSRRemark)
+            </td>
+
+
+
+            @Html.Raw("</tr>");
+        }
+        </tbody>
+    </table>
+

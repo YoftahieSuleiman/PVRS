@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Valuation Request Response";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td {
+        height: 28px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "assignRequest", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+
+
+    <input type="hidden" name="EstimationRequestId" id="EstimationRequestId" value='@TempData["requestid"]' />
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    @Html.Raw(TempData["requestinfo"])
+    <table align="center" style="color:black" class="tblForm">
+        <tr>
+            <td><b>Response: &nbsp;</b></td>
+            <td>
+                @{
+                    <textarea id="managerResponse" name="managerResponse">@(TempData["reponse"])</textarea>
+                }
+            </td>
+            <td><div id="responsemsg" style="color:red"></div></td>
+        </tr>
+
+
+
+        <tr>
+            <td colspan="3">
+                <input type="button" value="Respond" class="linkEffect" onclick="respond()" style="margin-left:70px;margin-top:14px" />
+                <div id="status" style="color:blue"></div>
+            </td>
+
+        </tr>
+    </table><br />
+    <hr />
+
+
+
+
+
+
+}
+<script>
+
+
+    function validateForm() {
+        document.getElementById("responsemsg").innerHTML = "";
+       if (document.getElementById("managerResponse").value=="") {
+            document.getElementById("responsemsg").innerHTML = "Please fill response.";
+        return false;
+        }
+
+
+
+
+
+        return true;
+
+    }
+
+    function respond() {
+        document.getElementById("status").innerHTML = "";
+        // Checking whether FormData is available in browser
+        if (validateForm()) {
+
+            // Create FormData object
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object
+             
+            fileData.append("managerResponse", document.getElementById("managerResponse").value);
+            fileData.append("requestid", document.getElementById("EstimationRequestId").value);
+
+
+
+            $.ajax({
+                url: '../Upload/Respond',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result == "Error Occured while processing your request. Please try again.") {
+                        document.getElementById("status").innerHTML = result;
+
+                    }
+            else{
+
+                    document.getElementById("status").innerHTML = "Success";
+                    }
+                    location.reload();
+
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            //alert("FormData is not supported.");
+        }
+
+    }
+
+
+</script>
+
+
+

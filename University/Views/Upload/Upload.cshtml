@@ -1,0 +1,179 @@
+﻿@{
+    ViewBag.Title = "Valuation Request";
+    Layout = null;
+}
+<style type="text/css">
+    .tblForm td {
+        height: 28px;
+    }
+</style>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "uploadDocument", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+    <input type="hidden" name="EstimationRequestId" id="EstimationRequestId" value='@TempData["requestId"]' />
+    <div style="color:red">
+        @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+        }
+    </div>
+    <table align="center" style="color:black" class="tblForm">
+        <tr>
+            <td><b>Document Type &nbsp;</b></td>
+            <td>
+                @Html.DropDownList("DocumentTypeId")<br />
+            </td>
+            <td></td>
+        </tr>
+        
+
+        <tr>
+            <td><b>File &nbsp;</b></td>
+            <td>
+                <input type="file" name="File" id="File" /><br />
+            </td>
+            <td><div style="color:red" id="filemsg"></div></td>
+        </tr>
+        <tr>
+            <td>Remark &nbsp;</td>
+            <td><div id="remarkArea" style="display:none"> <textarea name="Remark" id="Remark" cols="12" rows="5"></textarea></div></td>
+            <td><div id="remarkmsg" style="color:red" ></div></td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                <input type="button" value="   Upload   " class="linkEffect" onclick="uploadDocument()" />
+                <div id="status" style="color:blue"></div>
+            </td>
+
+        </tr>
+    </table><br />
+    <hr />
+    <br />
+    <h2>Documents uploaded for valuation request by @TempData["branch"] for @TempData["applicant"] on @TempData["requestdate"]</h2>
+    <div id="documentList">
+        @{
+    List<string> uploadedDocuments = (List<string>)ViewBag.UploadedDocuments;
+    if (uploadedDocuments.Count() > 0)
+    {
+        WriteLiteral("<ul>");
+        foreach (string doctype in uploadedDocuments)
+        {
+            WriteLiteral("<li>" + doctype + "</li>");
+        }
+
+        WriteLiteral("</ul>");
+
+    }
+    else
+    {
+        WriteLiteral("<p style='color:red'>No documents uploaded for this request</p>");
+    }
+        }
+    </div>
+
+
+
+
+}
+<script>
+       
+        var doctype = document.getElementById("DocumentTypeId").value;
+        if (doctype == 6) { //other
+            document.getElementById("remarkArea").style.display = "block";
+        }
+
+    $('#DocumentTypeId').change(function () {
+        var doctype = document.getElementById("DocumentTypeId").value;
+        if (doctype == 6) { //other
+            document.getElementById("remarkArea").style.display = "block";
+        }
+        else {
+            document.getElementById("remarkArea").style.display = "none";
+
+        }
+
+    });
+    function validateForm() {
+        document.getElementById("remarkmsg").innerHTML = "";
+        document.getElementById("filemsg").innerHTML = "";
+        var filePath = $("#File").val();
+        var file_ext = filePath.substr(filePath.lastIndexOf('.') + 1, filePath.length);
+        if (file_ext != "pdf" && file_ext != "PDF") {
+            document.getElementById("filemsg").innerHTML = "Only pdf files are allowed.";
+        return false;
+        }
+
+        var doctype = document.getElementById("DocumentTypeId").value;
+        var remark = document.getElementById("Remark").value;
+        if (doctype == 6 && remark=="") { //other
+            document.getElementById("remarkmsg").innerHTML = "Please explain the document you are trying to upload.";
+        }
+
+
+        if (document.getElementById("File").value == "") {
+            document.getElementById("filemsg").innerHTML = "File must be selected.";
+            return false;
+        }
+
+
+
+        return true;
+
+    }
+
+    function uploadDocument() {
+        document.getElementById("status").innerHTML = "";
+        // Checking whether FormData is available in browser  
+        if (validateForm()) {
+            var fileUpload = $("#File").get(0);
+            var files = fileUpload.files;
+
+            // Create FormData object  
+            var fileData = new FormData();
+
+            // Looping over all files and add it to FormData object  
+            for (var i = 0; i < 1; i++) {
+                fileData.append("File", files[i]);
+            }
+
+            // Adding one more key to FormData object  
+            fileData.append('EstimationRequestId', document.getElementById('EstimationRequestId').value);
+            fileData.append('DocumentTypeId', document.getElementById('DocumentTypeId').value);
+            fileData.append('Remark', document.getElementById('Remark').value);
+
+            $.ajax({
+                url: '../Upload/Upload',
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data  
+                data: fileData,
+                success: function (result) {
+                    if (result == "Error Occured while processing your request. Please try again.") {
+                        document.getElementById("status").innerHTML = result;
+
+                    }
+            else{
+
+                    document.getElementById("documentList").innerHTML = result;
+                    document.getElementById("status").innerHTML = "Success";
+            }
+
+                },
+                error: function (err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            //alert("FormData is not supported.");
+        }
+
+    }
+   
+    
+</script>
+

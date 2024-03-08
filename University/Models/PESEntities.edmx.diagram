@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5a423405c9384b829e576ca373737ee6" Name="Diagram1" ZoomLevel="63">
+        <EntityTypeShape EntityType="pesModel.luAccountStatu" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="pesModel.luGrant" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="pesModel.luUserActivity" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="pesModel.luUserGroup" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="pesModel.User" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="pesModel.FK__User__AccountSta__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="pesModel.FK__luGrant__Activit__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="pesModel.FK__luGrant__UserGro__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="pesModel.FK__User__UserGroup__3F466844" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="pesModel.luDocumentStatu" Width="1.5" PointX="3" PointY="8.125" />
+        <EntityTypeShape EntityType="pesModel.luCustomerType" Width="1.5" PointX="6" PointY="11.875" />
+        <EntityTypeShape EntityType="pesModel.luDocumentType" Width="1.5" PointX="3" PointY="11.25" />
+        <EntityTypeShape EntityType="pesModel.luPropertyType" Width="1.5" PointX="6" PointY="9.5" />
+        <EntityTypeShape EntityType="pesModel.luValuationPurpose" Width="1.5" PointX="6" PointY="7.25" />
+        <EntityTypeShape EntityType="pesModel.UploadedDocument" Width="1.5" PointX="10.5" PointY="6.5" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Docum__656C112C" />
+        <EntityTypeShape EntityType="pesModel.EstimationRequest" Width="1.5" PointX="8.25" PointY="4" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Assig__5DCAEF64" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Assig__5EBF139D" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Custo__5AEE82B9" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Estim__6477ECF3" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Prope__5BE2A6F2" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Statu__5FB337D6" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Uploa__60A75C0F" />
+        <AssociationConnector Association="pesModel.FK__UploadedD__Valua__5CD6CB2B" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

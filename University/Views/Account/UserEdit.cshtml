@@ -1,0 +1,92 @@
+﻿@model University.Models.User
+@{
+    Layout = null;
+}
+@using (Html.BeginForm("UserEdit", "Account", FormMethod.Post, new { id = "editUser", onsubmit = "return validateForm()" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <div style="color:red">
+            @{
+    if (TempData["ErrorMEssage"] != null)
+    {
+        Write(TempData["ErrorMEssage"]);
+    }
+            }
+        </div>
+
+       <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.UserId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserName, new { @class = "control-label col-md-2" })
+           
+            @{ 
+                TempData["stat1"] = ViewBag.stat1;
+               }
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UserName) <input type="hidden" name="password" value="@Model.Password" />
+                @Html.ValidationMessageFor(model => model.UserName)
+            </div>
+        </div>
+        
+        
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UserGroup, "UserGroup", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("UserGroup")
+                @Html.ValidationMessageFor(model => model.UserGroup)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Status, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name='Status' id='status'>
+                    @{
+    if (Model.Status == 0)
+    {
+        WriteLiteral("<option value='1'>Active</option><option selected='selected' value='0'>Disabled</option>");
+    }
+    else
+    {
+        WriteLiteral("<option value='1' selected='selected'>Active</option><option value='0'>Disabled</option>"); 
+    }
+   
+                    }
+                </select>
+                    @Html.ValidationMessageFor(model => model.Status)
+</div>
+        </div>
+        <div class="form-group" style="color:red" id="errormsg">
+            <input type="hidden" name="wizard" id="wizard" value="@ViewBag.Wizard" />
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="linkEffect" />&nbsp;&nbsp; <a href="#" class="linkEffect" data-dismiss="modal">Back to List</a>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+
+    function validateForm() {
+
+
+
+        document.getElementById("errormsg").innerHTML = "";
+        if (document.getElementById("UserName").value == "" || document.getElementById("UserGroup").value == "") {
+            document.getElementById("errormsg").innerHTML = "Both fields are requires.Please fill them.";
+            return false;
+        }
+
+
+
+        return true;
+
+    }
+</script>

@@ -1,0 +1,101 @@
+﻿@model University.Models.User
+
+@{
+    Layout = "";
+}
+@{
+    ViewBag.Title = "Login";
+}
+<link href="~/images/mystyles.css" rel="stylesheet" />
+<style type="text/css">
+
+    
+    #header {
+        align-content: center;
+        width: 68%; /* Set your desired with */
+        z-index: 2; /* Make sure its above other items. */
+        top: 30%;
+        left: 35%;
+        margin-top: -10%; /* Changes with height. */
+        margin-left: -10%; /* Your width divided by 2. */
+        /* You will not need the below, its only for styling   purposes. */
+        padding: 10px;
+        border:none;
+        border-radius: 5px;
+        text-align: center;
+       
+    }
+
+
+
+  
+    
+</style>
+<body id="loginbody2">
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+    {
+        <div id="LOGINPRIMARY2">
+
+
+
+            <div align="center" style="margin-top:135px"><h1 style="color: darkred; font-style: italic; font-weight: bolder; font-size: 48px; text-shadow: 2px 2px #ff0000;">ECX System</h1></div>
+            <label style="color:red" id="ErrorMessage">@TempData["ErrorMessage"]</label>
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            <div style="width:500px;overflow:auto;padding-left:150px;color:blue">@TempData["SuccessMessage"]</div>
+
+
+            <table align="center" style="color:black">
+
+                <tr>
+                    <td><b>User Name &nbsp;</b></td>
+                    <td>@Html.TextBoxFor(a => a.UserName)</td>
+
+                </tr>
+                <tr><td colspan="2">&nbsp;</tr>
+                <tr>
+                    <td>
+                        <b>  @Html.LabelFor(a => a.Password) </b>
+                    </td>
+                    <td>
+                        @Html.PasswordFor(a => a.Password)
+
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                        @if (TempData["msg"] != null)
+                        {
+                            <div style="color: indianred">
+
+                                @Html.Raw(TempData["msg"])
+                            </div>
+                        }
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="   Login   " class="linkEffect" style="border:0" />
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" align="left">
+                        <br />
+                        @Html.ActionLink("Forgot password?", "resetPassword", "Account") <br />
+                        <a href="~/Content/User%20Manual.pdf">User Manual </a>
+
+
+
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    }
+</body>
